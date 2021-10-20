@@ -1,0 +1,36 @@
+title Authentication
+actor User
+participant Web frontend API
+participant SessionManager
+participant DataAccessLayer
+
+note over DataAccessLayer: DTO=data transfer object
+
+User->Web frontend API:authenticate(username, password)
+activate Web frontend API
+
+Web frontend API->SessionManager:authenticate(username, password)
+activate SessionManager
+
+note over SessionManager: create query DTO for user
+
+SessionManager->DataAccessLayer:read(userQueryDTO)
+activate DataAccessLayer
+
+DataAccessLayer->SessionManager: userDTO
+deactivate DataAccessLayer
+
+note over SessionManager: check SHA512 hash of "password" against the hash in "userDTO"
+
+alt correct password
+SessionManager-->Web frontend API:user access token
+Web frontend API-->User:positive response + user access token
+
+else 
+SessionManager-->Web frontend API: null
+deactivate SessionManager
+Web frontend API-->User:negative response
+deactivate Web frontend API
+
+end
+

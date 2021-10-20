@@ -1,0 +1,18 @@
+title CAFF file processing
+
+participant Web frontend API
+participant SFTP server
+participant Native C++ parser
+
+note over Web frontend API: filename, location (of requested segment) provided
+
+Web frontend API->SFTP server: get(filename)
+activate SFTP server
+
+SFTP server-->Web frontend API:CAFF file
+deactivate SFTP server
+
+Web frontend API->Native C++ parser:parse(CAFF file, location)
+activate Native C++ parser
+Native C++ parser-->Web frontend API: extracted "preview" segment
+deactivate Native C++ parser

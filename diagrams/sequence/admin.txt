@@ -1,0 +1,27 @@
+title Authorization (admin)
+actor Admin
+participant Web frontend API
+participant SessionManager
+participant DataAccessLayer
+
+note over DataAccessLayer: DTO=data transfer object
+
+Admin->Web frontend API:request user level page(sessionCookie)
+activate Web frontend API
+
+Web frontend API->SessionManager:authorize(sessionCookie)
+activate SessionManager
+
+note over SessionManager: check sessionCookie against stored session
+
+SessionManager-->Web frontend API: result
+deactivate SessionManager
+alt result
+note over Web frontend API: perform any requested admin level actions
+Web frontend API-->Admin:admin level result
+else
+Web frontend API-->Admin:403 (forbidden)
+end
+deactivate Web frontend API
+
+

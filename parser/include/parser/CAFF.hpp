@@ -18,20 +18,28 @@ class CAFF
 		[[nodiscard]]
 		bool isValid() const { return valid; };
 
+        [[nodiscard]]
+        const std::stringstream& to_gif(std::stringstream& target) const;
+
 		[[nodiscard]]
 		std::string_view getCreator() const { return createdBy; };
 
 		[[nodiscard]]
 		const auto& getCreatedAt() const { return createdAt; };
 
-		[[nodiscard]]
-		const std::vector<Frame>& getFrames() const { return frames; };
+        [[nodiscard]]
+        int64_t getWidth() const { return width; };
+
+        [[nodiscard]]
+        int64_t getHeight() const { return height; };
 
 	private:
 		bool valid = false;
 		int64_t expectedFrameCount = 0;
 		std::string createdBy;
 		std::chrono::time_point<std::chrono::system_clock> createdAt;
+        int64_t width;
+        int64_t height;
 		std::vector<Frame> frames;
 
 		static constexpr std::string_view MAGIC{"CAFF"};

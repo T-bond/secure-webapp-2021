@@ -3,15 +3,10 @@
 #include <iostream>
 
 CIFF::CIFF(std::istream& ciffContent) {
-	try {
 		parseHeader(ciffContent);
 		parseImage(ciffContent);
 
 		valid = true;
-	} catch(const std::invalid_argument& exception) {
-		/// TODO: Handle errors
-		std::cout << exception.what() << std::endl;
-	}
 }
 
 void CIFF::parseHeader(std::istream& ciffContent) {

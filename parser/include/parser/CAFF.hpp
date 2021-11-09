@@ -19,7 +19,7 @@ class CAFF
 		bool isValid() const { return valid; };
 
         [[nodiscard]]
-        const std::stringstream& to_gif(std::stringstream& target) const;
+        void writePreview(char *filePath);
 
 		[[nodiscard]]
 		std::string_view getCreator() const { return createdBy; };

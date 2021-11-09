@@ -1,10 +1,9 @@
 #ifndef BACKEND_CIFF_HPP
 #define BACKEND_CIFF_HPP
 
-#include "Color.hpp"
-
 #include <istream>
 #include <vector>
+#include "Color.hpp"
 
 class CIFF
 {

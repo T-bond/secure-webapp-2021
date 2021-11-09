@@ -2,7 +2,6 @@
 
 #include <fstream>
 #include <iostream>
-#include <iomanip>
 
 int main(int argc, char** argv) {
 	if(argc >= 2) {
@@ -28,12 +27,8 @@ int main(int argc, char** argv) {
             if (argc == 3) {
                 std::cout << "Creating gif segment..." << std::endl;
 
-                std::stringstream rawImage;
-                caff.to_gif(rawImage);
-
                 char *outputPath = argv[2];
-                std::ofstream imageFileStream(outputPath, std::ofstream::binary);
-                imageFileStream << rawImage.rdbuf() << std::flush;
+                caff.writePreview(outputPath); /* preview in gif format */
                 std::cout << "Output written to file '" << outputPath << "'." << std::endl;
             }
 

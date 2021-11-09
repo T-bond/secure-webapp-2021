@@ -1,26 +1,23 @@
 #include "parser/CAFF.hpp"
-
 #include <iostream>
-#include <sstream>
-#include <Magick++.h>
+#include <gif.h>
 
 CAFF::CAFF(std::istream& caffContent) {
-		parseBlocks(caffContent);
-		valid = true;
+	parseBlocks(caffContent);
+	valid = true;
 }
 
-const std::stringstream& CAFF::to_gif(std::stringstream& target) const {
+void CAFF::writePreview(char *filePath) {
 
-    Magick::Image result(Magick::Geometry(width, height), "white");
+    GifWriter g;
+    GifBegin(&g, filePath, width, height, /* will specify delay for each image */ 0);
 
-    for (auto frame : frames)
-        ;
+    for (auto frame : frames) {
+        unsigned delay = (unsigned)(frame.first.count() / 10.0f); /* milliseconds to hundredths of a second */
+        GifWriteFrame(&g, reinterpret_cast<const uint8_t*>(frame.second.getImage().data()), frame.second.getWidth(), frame.second.getHeight(), delay);
+    }
 
-    Magick::Blob blob;
-    result.write(&blob, "gif");
-
-    target << reinterpret_cast<const char *>(blob.data()) << std::flush;
-    return target;
+    GifEnd(&g);
 }
 
 void CAFF::parseBlocks(std::istream& caffContent) {

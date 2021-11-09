@@ -1,16 +1,23 @@
 #include "parser/CAFF.hpp"
-
 #include <iostream>
+#include <gif.h>
 
 CAFF::CAFF(std::istream& caffContent) {
-	try {
-		parseBlocks(caffContent);
+	parseBlocks(caffContent);
+	valid = true;
+}
 
-		valid = true;
-	} catch(const std::invalid_argument& exception) {
-		/// TODO: Handle errors
-		std::cout << exception.what() << std::endl;
-	}
+void CAFF::writePreview(char *filePath) {
+
+    GifWriter g;
+    GifBegin(&g, filePath, width, height, /* will specify delay for each image */ 0);
+
+    for (auto frame : frames) {
+        unsigned delay = (unsigned)(frame.first.count() / 10.0f); /* milliseconds to hundredths of a second */
+        GifWriteFrame(&g, reinterpret_cast<const uint8_t*>(frame.second.getImage().data()), frame.second.getWidth(), frame.second.getHeight(), delay);
+    }
+
+    GifEnd(&g);
 }
 
 void CAFF::parseBlocks(std::istream& caffContent) {
@@ -43,6 +50,16 @@ void CAFF::parseBlocks(std::istream& caffContent) {
 		                            std::to_string(expectedFrameCount) + " Got: " + std::to_string(
 				actualFrameCount));
 	}
+
+    width = frames[0].second.getWidth();
+    height = frames[0].second.getHeight();
+
+    /* validate frame sizes */
+    for (auto frame : frames) {
+        if (frame.second.getWidth() != width || frame.second.getHeight() != height) {
+            throw std::invalid_argument("Frame sizes are not uniform in the image.");
+        }
+    }
 }
 
 void CAFF::parseHeader(std::istream& caffContent) {
@@ -98,6 +115,7 @@ void CAFF::parseCredits(std::istream& caffContent) {
 
 	int64_t createdByLength;
 	caffContent.read(reinterpret_cast<char*>(&createdByLength), sizeof createdByLength);
+
 	if(!caffContent.good() || createdByLength < 0) {
 		throw std::invalid_argument(
 				"The given content is not a valid CAFF file. The creator length can not be negative.");
@@ -113,10 +131,16 @@ void CAFF::parseCredits(std::istream& caffContent) {
 	} catch (const std::bad_alloc &) {
 		throw std::invalid_argument("Could not parse creator info, as it exceeds the memory limit.");
 	}
-	caffContent.read(createdBy.data(), createdByLength);
+    if (createdByLength > 0) {
+        caffContent.read(createdBy.data(), createdByLength);
+    } else {
+        createdBy = "<unknown>";
+    }
+
 }
 
 void CAFF::parseFrame(std::istream& caffContent) {
+
 	uint64_t blockSize = CAFF::extractBlockInformation(caffContent, BlockID::FRAME);
 
 	const auto& blockStartPos = caffContent.tellg();

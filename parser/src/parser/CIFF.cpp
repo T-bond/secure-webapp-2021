@@ -3,15 +3,10 @@
 #include <iostream>
 
 CIFF::CIFF(std::istream& ciffContent) {
-	try {
 		parseHeader(ciffContent);
 		parseImage(ciffContent);
 
 		valid = true;
-	} catch(const std::invalid_argument& exception) {
-		/// TODO: Handle errors
-		std::cout << exception.what() << std::endl;
-	}
 }
 
 void CIFF::parseHeader(std::istream& ciffContent) {
@@ -98,7 +93,10 @@ void CIFF::parseImage(std::istream& ciffContent) {
 	} catch (const std::bad_alloc &) {
 		throw std::invalid_argument("Could not parse image info, as it exceeds the memory limit.");
 	}
-	ciffContent.read(reinterpret_cast<char*>(image.data()), pixelCount * 3);
+
+    for (unsigned i = 0; i < pixelCount; ++i) {
+        ciffContent.read(reinterpret_cast<char*>(&image[i]), 3);
+    }
 
 	if(ciffContent.fail()) {
 		throw std::invalid_argument("The given content is not a valid CIFF file. Could not read image.");

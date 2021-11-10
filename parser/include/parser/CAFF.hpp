@@ -18,7 +18,6 @@ public:
     [[nodiscard]]
     bool isValid() const { return valid; };
 
-    [[nodiscard]]
     void writePreview(char *filePath);
 
     [[nodiscard]]

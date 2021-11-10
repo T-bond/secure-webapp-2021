@@ -136,8 +136,10 @@ void GifGetClosestPaletteColor( GifPalette* pPal, int r, int g, int b, int* best
     }
 }
 
-void GifSwapPixels(uint8_t* image, int pixA, int pixB)
+void GifSwapPixels(uint8_t* image, int pixA, int pixB, uint imageSize)
 {
+    assert(pixA*4+3 < imageSize);
+    assert(pixB*4+3 < imageSize);
 
     uint8_t rA = image[pixA*4];
     uint8_t gA = image[pixA*4+1];
@@ -161,10 +163,10 @@ void GifSwapPixels(uint8_t* image, int pixA, int pixB)
 }
 
 // just the partition operation from quicksort
-int GifPartition(uint8_t* image, const int left, const int right, const int elt, int pivotIndex)
+int GifPartition(uint8_t* image, const int left, const int right, const int elt, int pivotIndex, uint imageSize)
 {
     const int pivotValue = image[pivotIndex*4+elt];
-    GifSwapPixels(image, pivotIndex, right-1);
+    GifSwapPixels(image, pivotIndex, right-1, imageSize);
     int storeIndex = left;
     bool split = false;
     for(int ii=left; ii<right-1; ++ii)
@@ -172,43 +174,43 @@ int GifPartition(uint8_t* image, const int left, const int right, const int elt,
         int arrayVal = image[ii*4+elt];
         if( arrayVal < pivotValue )
         {
-            GifSwapPixels(image, ii, storeIndex);
+            GifSwapPixels(image, ii, storeIndex, imageSize);
             ++storeIndex;
         }
         else if( arrayVal == pivotValue )
         {
             if(split)
             {
-                GifSwapPixels(image, ii, storeIndex);
+                GifSwapPixels(image, ii, storeIndex, imageSize);
                 ++storeIndex;
             }
             split = !split;
         }
     }
-    GifSwapPixels(image, storeIndex, right-1);
+    GifSwapPixels(image, storeIndex, right-1, imageSize);
     return storeIndex;
 }
 
 // Perform an incomplete sort, finding all elements above and below the desired median
-void GifPartitionByMedian(uint8_t* image, int left, int right, int com, int neededCenter)
+void GifPartitionByMedian(uint8_t* image, int left, int right, int com, int neededCenter, uint imageSize)
 {
     if(left < right-1)
     {
         int pivotIndex = left + (right-left)/2;
 
-        pivotIndex = GifPartition(image, left, right, com, pivotIndex);
+        pivotIndex = GifPartition(image, left, right, com, pivotIndex, imageSize);
 
         // Only "sort" the section of the array that contains the median
         if(pivotIndex > neededCenter)
-            GifPartitionByMedian(image, left, pivotIndex, com, neededCenter);
+            GifPartitionByMedian(image, left, pivotIndex, com, neededCenter, imageSize);
 
         if(pivotIndex < neededCenter)
-            GifPartitionByMedian(image, pivotIndex+1, right, com, neededCenter);
+            GifPartitionByMedian(image, pivotIndex+1, right, com, neededCenter, imageSize);
     }
 }
 
 // Builds a palette by creating a balanced k-d tree of all pixels in the image
-void GifSplitPalette(uint8_t* image, int numPixels, int firstElt, int lastElt, int splitElt, int splitDist, int treeNode, bool buildForDither, GifPalette* pal)
+void GifSplitPalette(uint8_t* image, int numPixels, int firstElt, int lastElt, int splitElt, int splitDist, int treeNode, bool buildForDither, GifPalette* pal, uint imageSize)
 {
     if(lastElt <= firstElt || numPixels == 0)
         return;
@@ -314,13 +316,13 @@ void GifSplitPalette(uint8_t* image, int numPixels, int firstElt, int lastElt, i
     int subPixelsA = numPixels * (splitElt - firstElt) / (lastElt - firstElt);
     int subPixelsB = numPixels-subPixelsA;
 
-    GifPartitionByMedian(image, 0, numPixels, splitCom, subPixelsA);
+    GifPartitionByMedian(image, 0, numPixels, splitCom, subPixelsA, imageSize);
 
     pal->treeSplitElt[treeNode] = (uint8_t)splitCom;
     pal->treeSplit[treeNode] = image[subPixelsA*4+splitCom];
 
-    GifSplitPalette(image,              subPixelsA, firstElt, splitElt, splitElt-splitDist, splitDist/2, treeNode*2,   buildForDither, pal);
-    GifSplitPalette(image+subPixelsA*4, subPixelsB, splitElt, lastElt,  splitElt+splitDist, splitDist/2, treeNode*2+1, buildForDither, pal);
+    GifSplitPalette(image,              subPixelsA, firstElt, splitElt, splitElt-splitDist, splitDist/2, treeNode*2,   buildForDither, pal, imageSize);
+    GifSplitPalette(image+subPixelsA*4, subPixelsB, splitElt, lastElt,  splitElt+splitDist, splitDist/2, treeNode*2+1, buildForDither, pal, imageSize);
 }
 
 // Finds all pixels that have changed from the previous image and
@@ -359,7 +361,7 @@ void GifMakePalette( const uint8_t* lastFrame, const uint8_t* nextFrame, uint32_
 
     // SplitPalette is destructive (it sorts the pixels by color) so
     // we must create a copy of the image for it to destroy
-    auto imageSize = (size_t)(width * height * 4 * sizeof(uint8_t));
+    auto imageSize = (uint)(width * height * 4 * sizeof(uint8_t));
     auto* destroyableImage = (uint8_t*)GIF_TEMP_MALLOC(imageSize);
     memcpy(destroyableImage, nextFrame, imageSize);
 
@@ -371,7 +373,7 @@ void GifMakePalette( const uint8_t* lastFrame, const uint8_t* nextFrame, uint32_
     const int splitElt = lastElt/2;
     const int splitDist = splitElt/2;
 
-    GifSplitPalette(destroyableImage, numPixels, 1, lastElt, splitElt, splitDist, 1, buildForDither, pPal);
+    GifSplitPalette(destroyableImage, numPixels, 1, lastElt, splitElt, splitDist, 1, buildForDither, pPal, imageSize);
 
     GIF_TEMP_FREE(destroyableImage);
 
@@ -557,13 +559,13 @@ void GifWriteLzwImage(FILE* f, uint8_t* image, uint32_t left, uint32_t top,  uin
     {
         for(uint32_t xx=0; xx<width; ++xx)
         {
-    #ifdef GIF_FLIP_VERT
+#ifdef GIF_FLIP_VERT
             // bottom-left origin image (such as an OpenGL capture)
             uint8_t nextValue = image[((height-1-yy)*width+xx)*4+3];
-    #else
+#else
             // top-left origin
             uint8_t nextValue = image[(yy*width+xx)*4+3];
-    #endif
+#endif
 
             if( curCode < 0 )
             {
@@ -632,7 +634,7 @@ bool GifBegin( GifWriter* writer, const char* filename, uint32_t width, uint32_t
 {
     (void)bitDepth; (void)dither; // Mute "Unused argument" warnings
 #if defined(_MSC_VER) && (_MSC_VER >= 1400)
-	writer->f = 0;
+    writer->f = 0;
     fopen_s(&writer->f, filename, "wb");
 #else
     writer->f = fopen(filename, "wb");

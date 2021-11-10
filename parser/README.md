@@ -87,3 +87,15 @@ The CAFF parser uses the CIFF parser to parse extract necessary information from
 `include/parser/Color.hpp`
 
 Color data class capable of storing a single pixel as RGBA values.
+
+### Main program
+`main.cpp`
+
+A short program performing the following (using the CAFF parser):
+- Open and validate the CAFF file received as the first command line argument. The parser exits if the CAFF file is incorrect.
+- Print the following information about the CAFF file (see the `SampleOutputs.md` file in this folder):
+  - author (=creator)
+  - date of creation
+  - resolution (width x height, in pixels)
+  - confirmation of validity
+- Write the parsed video content as an animated GIF file to the file path specified by the second command line argument.

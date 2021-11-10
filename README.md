@@ -11,6 +11,7 @@ This repository contains our web secure application implemented for the 2021 com
 ### CAFF parser
 
 **Artifacts created for the 2nd phase of the home assignment can be found in the `parser` directory:**
+
 https://github.com/aldr4fu/secure-webapp-2021/tree/main/parser
 
 ### Sample ouputs produced by the CAFF parser

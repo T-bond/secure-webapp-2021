@@ -107,11 +107,17 @@ void CAFF::parseCredits(std::istream& caffContent) {
 	caffContent.read(reinterpret_cast<char*>(&hourValue), sizeof hourValue);
 	int8_t minuteValue;
 	caffContent.read(reinterpret_cast<char*>(&minuteValue), sizeof minuteValue);
-	{
-		using namespace std::chrono;
-		createdAt =
-				sys_days{year(yearValue) / month(monthValue) / day(dayValue)} + hours(hourValue) + minutes(minuteValue);
-	}
+
+    std::tm tm = {
+            0, /* seconds */
+            minuteValue,
+            hourValue,
+            (dayValue),
+            (monthValue) - 1,
+            (yearValue) - 1900,
+            0 /* no daytime saving */
+    };
+    createdAt = std::mktime(&tm) - timezone; // this is necessary to avoid timezone dependent results
 
 	int64_t createdByLength;
 	caffContent.read(reinterpret_cast<char*>(&createdByLength), sizeof createdByLength);

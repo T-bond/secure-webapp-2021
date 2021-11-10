@@ -37,7 +37,7 @@ class CAFF
 		bool valid = false;
 		int64_t expectedFrameCount = 0;
 		std::string createdBy;
-		std::chrono::time_point<std::chrono::system_clock> createdAt;
+		time_t createdAt;
         int64_t width;
         int64_t height;
 		std::vector<Frame> frames;

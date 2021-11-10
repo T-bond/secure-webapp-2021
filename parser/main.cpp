@@ -15,8 +15,7 @@ int main(int argc, char** argv) {
             std::cout << "Author: " << creator << std::endl;
 
             const auto &createdAt = caff.getCreatedAt();
-            time_t createdAt_time_t = std::chrono::system_clock::to_time_t(createdAt);
-            std::cout << "Date of creation: " << asctime(gmtime(&createdAt_time_t));
+            std::cout << "Date of creation: " << asctime(gmtime(&createdAt));
 
             int64_t width = caff.getWidth();
             int64_t height = caff.getHeight();

@@ -76,6 +76,8 @@ In addition, the parser can validate CIFF image content.
 CAFF video parser, capable of extracting the following data from a CAFF video file:
 - creator
 - creation date
+- widtht of the first CIFF image contained in the CAFF file
+- height of the first CIFF image contained in the CAFF file
 
 In addition, the parser can validate CAFF video content.
 Using the CAFF parser, it is possible to generate GIF images from CAFF video files.

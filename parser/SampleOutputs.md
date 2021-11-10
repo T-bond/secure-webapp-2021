@@ -15,9 +15,21 @@ Parsing CAFF video file...
 Author: Test Creator
 Date of creation: Thu Jul  2 14:50:00 2020
 Resolution: 1000x667
+Caption: 
+  Frame 0:Beautiful scenery
+  Frame 1:Beautiful scenery
+Tags: 
+  Frame 0:
+    Tag 0:landscape
+    Tag 1:sunset
+    Tag 2:mountains
+  Frame 1:
+    Tag 0:landscape
+    Tag 1:sunset
+    Tag 2:mountains
 Valid: true
 Creating gif segment...
-Output written to file 'output.gif'.
+Output written to file '../examples/out/1.gif'.
 ```
 rendered preview:
 
@@ -33,9 +45,31 @@ Parsing CAFF video file...
 Author: Second_Creator
 Date of creation: Thu Jul  2 14:50:00 2020
 Resolution: 1000x667
+Caption: 
+  Frame 0:Beautiful scenery
+  Frame 1:Beautiful scenery
+  Frame 2:Beautiful scenery
+  Frame 3:Beautiful scenery
+Tags: 
+  Frame 0:
+    Tag 0:landscape
+    Tag 1:sunset
+    Tag 2:mountains
+  Frame 1:
+    Tag 0:landscape
+    Tag 1:sunset
+    Tag 2:mountains
+  Frame 2:
+    Tag 0:landscape
+    Tag 1:sunset
+    Tag 2:mountains
+  Frame 3:
+    Tag 0:landscape
+    Tag 1:sunset
+    Tag 2:mountains
 Valid: true
 Creating gif segment...
-Output written to file 'output.gif'.
+Output written to file '../examples/out/2.gif'.
 ```
 rendered preview:
 
@@ -51,9 +85,21 @@ Parsing CAFF video file...
 Author: <unknown>
 Date of creation: Thu Jul  2 14:50:00 2020
 Resolution: 1000x667
+Caption: 
+  Frame 0:Beautiful scenery
+  Frame 1:Beautiful scenery
+Tags: 
+  Frame 0:
+    Tag 0:landscape
+    Tag 1:sunset
+    Tag 2:mountains
+  Frame 1:
+    Tag 0:landscape
+    Tag 1:sunset
+    Tag 2:mountains
 Valid: true
 Creating gif segment...
-Output written to file 'output.gif'.
+Output written to file '../examples/out/3.gif'.
 ```
 rendered preview:
 

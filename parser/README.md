@@ -41,6 +41,7 @@ The parser marks CAFF video files as invalid if CIFF frame sizes vary during the
 
 When used as a component for a web application, the parser may write gif files to a randomized path enabling parallel serving of multiple requests. This however is up to the backend development team.
 
+<<<<<<< HEAD
 For sample outputs including logs and GIF files, please refer to the SampleParserOutputs wiki page of the project.
 
 # Project structure
@@ -78,6 +79,8 @@ CAFF video parser, capable of extracting the following data from a CAFF video fi
 - creation date
 - widtht of the first CIFF image contained in the CAFF file
 - height of the first CIFF image contained in the CAFF file
+- captions (caption of each image)
+- image tags (all tags for each image)
 
 In addition, the parser can validate CAFF video content.
 Using the CAFF parser, it is possible to generate GIF images from CAFF video files.
@@ -97,5 +100,11 @@ A short program performing the following (using the CAFF parser):
   - author (=creator)
   - date of creation
   - resolution (width x height, in pixels)
+  - caption for each frame
+  - all tags of each frame
   - confirmation of validity
 - Write the parsed video content as an animated GIF file to the file path specified by the second command line argument.
+
+## Sample outputs
+
+For sample outputs including logs and GIF files, please refer to the SampleParserOutputs.md document in this folder.

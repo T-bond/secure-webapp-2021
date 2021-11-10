@@ -12,7 +12,7 @@ void CAFF::writePreview(char *filePath) {
     GifWriter g;
     GifBegin(&g, filePath, width, height, /* will specify delay for each image */ 0);
 
-    for (auto frame : frames) {
+    for (auto& frame : frames) {
         unsigned delay = (unsigned)(frame.first.count() / 10.0f); /* milliseconds to hundredths of a second */
         GifWriteFrame(&g, reinterpret_cast<const uint8_t*>(frame.second.getImage().data()), frame.second.getWidth(), frame.second.getHeight(), delay);
     }
@@ -55,7 +55,7 @@ void CAFF::parseBlocks(std::istream& caffContent) {
     height = frames[0].second.getHeight();
 
     /* validate frame sizes */
-    for (auto frame : frames) {
+    for (auto& frame : frames) {
         if (frame.second.getWidth() != width || frame.second.getHeight() != height) {
             throw std::invalid_argument("Frame sizes are not uniform in the image.");
         }
@@ -186,4 +186,26 @@ uint64_t CAFF::extractBlockInformation(std::istream& caffContent, const CAFF::Bl
 	}
 
 	return blockSize;
+}
+
+[[nodiscard]]
+std::vector<std::string_view> CAFF::getCaption() const {
+    std::vector<std::string_view> caption;
+
+    for (auto& frame : frames) {
+        caption.push_back(frame.second.getCaption());
+    }
+
+    return caption;
+}
+
+[[nodiscard]]
+std::vector<std::vector<std::string>> CAFF::getTags() const {
+    std::vector<std::vector<std::string>> tags;
+
+    for (auto& frame : frames) {
+        tags.push_back(frame.second.getTags());
+    }
+
+    return tags;
 }

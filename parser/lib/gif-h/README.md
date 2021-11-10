@@ -1,5 +1,10 @@
-gif-h
+modified gif-h
 =====
+
+This is a slightly modified version of the gif-h requirements partially using c++ types and asserts for indexing.
+
+gif-h
+------------
 
 This one-header library offers a simple, very limited way to create animated GIFs directly in code.
 Those looking for particular cleverness are likely to be disappointed; it's pretty much a straight-ahead

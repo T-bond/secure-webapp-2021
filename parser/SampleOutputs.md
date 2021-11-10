@@ -1,3 +1,5 @@
+### Sample outputs (and fuzzing)
+
 This web application uses an efficient and secure CAFF parser built using C++. For building and more details, please refer to the following document:
 
 https://github.com/aldr4fu/secure-webapp-2021/blob/main/parser/README.md
@@ -104,3 +106,9 @@ Output written to file '../examples/out/3.gif'.
 rendered preview:
 
 ![unable to display preview, please check the examples folder](https://github.com/aldr4fu/secure-webapp-2021/blob/main/parser/examples/out/3.gif)
+
+### Fuzzing
+
+The following screenshot shows a total of 6 unsuccessful fuzzing attempts using the AFL fuzzer:
+
+![unable to display preview, please check the examples folder](https://github.com/aldr4fu/secure-webapp-2021/blob/main/parser/doc/fuzzing.png)

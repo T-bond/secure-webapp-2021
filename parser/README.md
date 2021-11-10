@@ -1,12 +1,10 @@
-# Prerequisites
+# How to run
+
+### Prerequisites
 
 - cmake (3.0 or above)
 - make
 - clang / gcc (With C++17 support)
-
-The project uses the `gif-h` GIF library (third party, bundled with the project).
-
-https://github.com/charlietangora/gif-h
 
 Ubuntu:
 `sudo apt install build-essential cmake g++`
@@ -15,12 +13,12 @@ Arch:
 Windows:
 Install all necessary prerequisites manually.
 
-# Build steps
+### Build steps
 
 1. `mkdir build && cd build && cmake ..`
 2. `make`
 
-# Run steps
+### Run steps
 Print creator and creation date of a CAFF video file and validate the file:
 
 `./parser ../examples/in/3.caff`
@@ -41,26 +39,19 @@ The parser marks CAFF video files as invalid if CIFF frame sizes vary during the
 
 When used as a component for a web application, the parser may write gif files to a randomized path enabling parallel serving of multiple requests. This however is up to the backend development team.
 
-# Buffer overflow protection
-
-We configured cmake to use the `-fstack-protector-all` g++ flag for C++ compilation (to harden the application against buffer overflow exploits).
-
-If experiencing performance issues, we recommend building with the `-fstack-protector` flag instead (this flag only adds a guard variable to functions classified vulnerable).
-
 # Project structure
 
 - `.idea/`: CLion project files.
-- `doc/`: Any documentation files not featured in the root directory of the parser for a quick review (contains the official CIFF and CAFF specifications).
+- `doc/`: Any documentation files not featured in the root directory of the parser for a quick review (contains the official CIFF and CAFF specifications and a screenshot of the fuzzing process).
 - `examples/`: sample CIFF inputs and GIF outputs
 - `lib/`: external libraries (third party)
 - `include/`: parser libraryheader files
 - `src/`: source files
 - `main.cpp`: a short demo program validating a CAFF file and transforming it into a GIF file (see the "Run steps" section for usage details)
 - `CMakeLists.txt`: cmake project file
-- `README.md, SampleOutputs.md`: readme file + sample outputs on the test CAFF files
+- `README.md`: readme file
+- `SampleOutputs.md`: sample outputs on the test CAFF files + a screenshot of the 
 - `.gitignore`
-
-# Source and header files
 
 ### CIFF parser
 `include/parser/CIFF.hpp, include/parser/CIFF.cpp`
@@ -108,7 +99,28 @@ A short program performing the following (using the CAFF parser):
   - confirmation of validity
 - Write the parsed video content as an animated GIF file to the file path specified by the second command line argument.
 
+### External libraries
+`lib/`
+
+This project includes a slightly modified version of the `gif-h` library:
+
+https://github.com/charlietangora/gif-h
+
+Minor modifications include:
+- Some pointer types have been replaced with their STL counterparts.
+- A few asertions have been inserted to guard against overindexing (where STL replacement has not been made).
+
+# Buffer overflow protection
+
+We configured cmake to use the `-fstack-protector-all` g++ flag for C++ compilation (to harden the application against buffer overflow exploits).
+
+If experiencing performance issues, we recommend building with the `-fstack-protector` flag instead (this flag only adds a guard variable to functions classified vulnerable).
+
+The software has been fuzzed usinig AFL (a screenshot of the fuzzing process has been appended to the SampleOutputs file).
+
+https://github.com/google/AFL
+
 # Sample outputs
 
-For sample outputs including logs and GIF files, please refer to the SampleParserOutputs.md document in this folder.
+For sample outputs including logs and GIF files, please refer to the SampleOutputs.md document in this folder.
 

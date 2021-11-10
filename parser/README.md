@@ -41,9 +41,6 @@ The parser marks CAFF video files as invalid if CIFF frame sizes vary during the
 
 When used as a component for a web application, the parser may write gif files to a randomized path enabling parallel serving of multiple requests. This however is up to the backend development team.
 
-<<<<<<< HEAD
-For sample outputs including logs and GIF files, please refer to the SampleParserOutputs wiki page of the project.
-
 # Project structure
 
 - `.idea/`: CLion project files.

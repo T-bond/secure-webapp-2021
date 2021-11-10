@@ -12,54 +12,60 @@ using Frame = std::pair<std::chrono::duration<int64_t, std::milli>, CIFF>;
 
 class CAFF
 {
-	public:
-		explicit CAFF(std::istream& caffContent);
+public:
+    explicit CAFF(std::istream& caffContent);
 
-		[[nodiscard]]
-		bool isValid() const { return valid; };
+    [[nodiscard]]
+    bool isValid() const { return valid; };
 
-        [[nodiscard]]
-        void writePreview(char *filePath);
+    [[nodiscard]]
+    void writePreview(char *filePath);
 
-		[[nodiscard]]
-		std::string_view getCreator() const { return createdBy; };
+    [[nodiscard]]
+    std::string_view getCreator() const { return createdBy; };
 
-		[[nodiscard]]
-		const auto& getCreatedAt() const { return createdAt; };
+    [[nodiscard]]
+    const auto& getCreatedAt() const { return createdAt; };
 
-        [[nodiscard]]
-        int64_t getWidth() const { return width; };
+    [[nodiscard]]
+    int64_t getWidth() const { return width; };
 
-        [[nodiscard]]
-        int64_t getHeight() const { return height; };
+    [[nodiscard]]
+    int64_t getHeight() const { return height; };
 
-	private:
-		bool valid = false;
-		int64_t expectedFrameCount = 0;
-		std::string createdBy;
-		time_t createdAt;
-        int64_t width;
-        int64_t height;
-		std::vector<Frame> frames;
+    [[nodiscard]]
+    std::vector<std::string_view> getCaption() const;
 
-		static constexpr std::string_view MAGIC{"CAFF"};
-		static constexpr std::size_t MAGIC_LENGTH = MAGIC.length();
-		static constexpr std::size_t REQUIRED_HEADER_LENGTH = MAGIC.length() + sizeof(int64_t) * 2;
-		static constexpr std::size_t CREATED_AT_LENGTH = sizeof(int16_t) + sizeof(int8_t) * 4;
+    [[nodiscard]]
+    std::vector<std::vector<std::string>> getTags() const;
 
-		enum class BlockID : int
-		{
-				HEADER = 0x1,
-				CREDITS = 0x2,
-				FRAME = 0x3
-		};
+private:
+    bool valid = false;
+    int64_t expectedFrameCount = 0;
+    std::string createdBy;
+    time_t createdAt;
+    int64_t width;
+    int64_t height;
+    std::vector<Frame> frames;
 
-		void parseBlocks(std::istream& caffContent);
-		void parseHeader(std::istream& caffContent);
-		void parseCredits(std::istream& caffContent);
-		void parseFrame(std::istream& caffContent);
+    static constexpr std::string_view MAGIC{"CAFF"};
+    static constexpr std::size_t MAGIC_LENGTH = MAGIC.length();
+    static constexpr std::size_t REQUIRED_HEADER_LENGTH = MAGIC.length() + sizeof(int64_t) * 2;
+    static constexpr std::size_t CREATED_AT_LENGTH = sizeof(int16_t) + sizeof(int8_t) * 4;
 
-		static uint64_t extractBlockInformation(std::istream& caffContent, const BlockID &blockId) ;
+    enum class BlockID : int
+    {
+        HEADER = 0x1,
+        CREDITS = 0x2,
+        FRAME = 0x3
+    };
+
+    void parseBlocks(std::istream& caffContent);
+    void parseHeader(std::istream& caffContent);
+    void parseCredits(std::istream& caffContent);
+    void parseFrame(std::istream& caffContent);
+
+    static uint64_t extractBlockInformation(std::istream& caffContent, const BlockID &blockId) ;
 };
 
 

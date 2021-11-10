@@ -23,7 +23,7 @@ class CIFF
 		std::string_view getCaption() const { return caption; };
 
 		[[nodiscard]]
-		const std::vector<std::string>& getTags() const { return tags; };
+		std::vector<std::string> getTags() const { return tags; };
 
 		[[nodiscard]]
 		const std::vector<Color>& getImage() const { return image; };

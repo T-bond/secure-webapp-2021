@@ -21,6 +21,26 @@ int main(int argc, char** argv) {
             int64_t height = caff.getHeight();
             std::cout << "Resolution: " << width << "x" << height << std::endl;
 
+            std::cout << "Caption: " << std::endl;
+            unsigned frameIdx = 0;
+            for (auto caption: caff.getCaption()) {
+                std::cout << "  Frame " << frameIdx << ":" << caption << std::endl;
+                frameIdx++;
+            }
+
+            std::cout << "Tags: " << std::endl;
+            frameIdx = 0;
+            for (auto tags : caff.getTags()) { /* iterate through frame level caption collections */
+                std::cout << "  Frame " << frameIdx << ":" <<  std::endl;
+
+                unsigned tagIdx = 0;
+                for (auto& tag : tags) { /* iterate through captions of the current frame */
+                    std::cout << "    Tag " << tagIdx << ":" << tag << std::endl;
+                    tagIdx++;
+                }
+                frameIdx++;
+            }
+
             std::cout << "Valid: " << std::boolalpha << caff.isValid() << std::endl;
 
             if (argc == 3) {

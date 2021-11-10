@@ -108,7 +108,7 @@ A short program performing the following (using the CAFF parser):
   - confirmation of validity
 - Write the parsed video content as an animated GIF file to the file path specified by the second command line argument.
 
-## Sample outputs
+# Sample outputs
 
 For sample outputs including logs and GIF files, please refer to the SampleParserOutputs.md document in this folder.
 

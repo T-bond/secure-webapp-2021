@@ -41,6 +41,12 @@ The parser marks CAFF video files as invalid if CIFF frame sizes vary during the
 
 When used as a component for a web application, the parser may write gif files to a randomized path enabling parallel serving of multiple requests. This however is up to the backend development team.
 
+# Buffer overflow protection
+
+We configured cmake to use the `-fstack-protector-all` g++ flag for C++ compilation (to harden the application against buffer overflow exploits).
+
+If experiencing performance issues, we recommend building with the `-fstack-protector` flag instead (this flag only adds a guard variable to functions classified vulnerable).
+
 # Project structure
 
 - `.idea/`: CLion project files.
@@ -105,3 +111,4 @@ A short program performing the following (using the CAFF parser):
 ## Sample outputs
 
 For sample outputs including logs and GIF files, please refer to the SampleParserOutputs.md document in this folder.
+

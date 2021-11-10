@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 project(parser)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS "-fstack-protector-all")
 
 include_directories("include")
 include_directories("lib/gif-h")

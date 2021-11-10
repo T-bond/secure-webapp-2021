@@ -1,8 +1,8 @@
-# Prerequisites
+## Prerequisites
 
 - cmake (3.0 or above)
 - make
-- clang / gcc (With C++20 support)
+- clang / gcc (With C++17 support)
 
 The project uses the `gif-h` GIF library (third party, bundled with the project).
 
@@ -15,21 +15,21 @@ Arch:
 Windows:
 Install all necessary prerequisites manually.
 
-## Build steps
+# Build steps
 
 1. `mkdir build && cd build && cmake ..`
 2. `make`
 
-## Run steps
+# Run steps
 Print creator and creation date of a CAFF video file and validate the file:
 
-`./parser ../examples/3.caff`
+`./parser ../examples/in/3.caff`
 
 Generate preview segment (specifying the start frame and the length of the segment):
 
-`./parser ../examples/3.caff output.gif`
+`./parser ../examples/in/3.caff output.gif`
 
-## How it works
+# How it works
 
 The parser module dives into the contents of CAFF (CrySyS Animated File Format) files, verifying the file and extracting infromation from it, including:
 - The Author of the CIFF file.
@@ -42,3 +42,46 @@ The parser marks CAFF video files as invalid if CIFF frame sizes vary during the
 When used as a component for a web application, the parser may write gif files to a randomized path enabling parallel serving of multiple requests. This however is up to the backend development team.
 
 For sample outputs including logs and GIF files, please refer to the SampleParserOutputs wiki page of the project.
+
+# Project structure
+
+- `.idea/`: CLion project files.
+- `doc/`: Any documentation files not featured in the root directory of the parser for a quick review (contains the official CIFF and CAFF specifications).
+- `examples/`: sample CIFF inputs and GIF outputs
+- `lib/`: external libraries (third party)
+- `include/`: parser libraryheader files
+- `src/`: source files
+- `main.cpp`: a short demo program validating a CAFF file and transforming it into a GIF file (see the "Run steps" section for usage details)
+- `CMakeLists.txt`: cmake project file
+- `README.md, SampleOutputs.md`: readme file + sample outputs on the test CAFF files
+- `.gitignore`
+
+# Source and header files
+
+### CIFF parser
+`include/parser/CIFF.hpp, include/parser/CIFF.cpp`
+
+CIFF image parser, capable of extracting the following data from a CIFF image:
+- image width
+- image height
+- caption
+- image tags
+- image data
+
+In addition, the parser can validate CIFF image content.
+
+### CAFF parser
+`include/parser/CAFF.hpp, include/parser/CAFF.cpp`
+
+CAFF video parser, capable of extracting the following data from a CAFF video file:
+- creator
+- creation date
+
+In addition, the parser can validate CAFF video content.
+Using the CAFF parser, it is possible to generate GIF images from CAFF video files.
+The CAFF parser uses the CIFF parser to parse extract necessary information from CIFF image frames belonging to the CAFF video file.
+
+### Color parser
+`include/parser/Color.hpp`
+
+Color data class capable of storing a single pixel as RGBA values.

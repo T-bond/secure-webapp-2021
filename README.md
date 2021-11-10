@@ -10,7 +10,7 @@ This repository contains our web secure application implemented for the 2021 com
 [![](https://sonarcloud.io/api/project_badges/measure?project=aldr4fu_secure-webapp-2021&metric=code_smells)](https://sonarcloud.io/summary/overall?id=aldr4fu_secure-webapp-2021)
 ### CAFF parser
 
-Artifacts created for the 2nd phase of the home assignment can be found in the `parser` directory:
+**Artifacts created for the 2nd phase of the home assignment can be found in the `parser` directory:**
 https://github.com/aldr4fu/secure-webapp-2021/tree/main/parser
 
 ### Sample ouputs produced by the CAFF parser

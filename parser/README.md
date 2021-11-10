@@ -4,7 +4,9 @@
 - make
 - clang / gcc (With C++20 support)
 
-The project uses the `gif-h` GIF library (bundled with the project).
+The project uses the `gif-h` GIF library (third party, bundled with the project).
+
+https://github.com/charlietangora/gif-h
 
 Ubuntu:
 `sudo apt install build-essential cmake g++`

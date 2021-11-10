@@ -1,4 +1,4 @@
-## Prerequisites
+# Prerequisites
 
 - cmake (3.0 or above)
 - make

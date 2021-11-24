@@ -34,7 +34,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-ui:1.5.12")
     implementation("org.springdoc:springdoc-openapi-data-rest:1.5.12")
     implementation("org.springdoc:springdoc-openapi-kotlin:1.5.12")
-    runtimeOnly("org.mariadb.jdbc:poqstgresql-java-client")
+    runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")

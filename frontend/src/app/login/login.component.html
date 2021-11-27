@@ -4,6 +4,7 @@
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <h2 id="welcome-message" >Welcome to the CAFF store!</h2>
         <mat-form-field id="username-textfield" class="full-width-input">
+          <mat-error *ngIf="form.get('email').hasError('flag')">{{ 'Display.requiredMessage' }}</mat-error>
           <input matInput type="email" placeholder="email address" formControlName="email" required>
         </mat-form-field>
         <mat-form-field id="password-textfield" class="full-width-input">

@@ -27,13 +27,19 @@ export class LoginComponent implements OnInit {
   }
 
   public onSubmit(): void {
-    this.authApi.signIn({
-      body: {
-        email: this.form.get("email").value,
-        password: this.form.get("password").value
+    if (this.form.valid) {
+      try {
+        this.authApi.signIn({
+          body: {
+            email: this.form.get("email").value,
+            password: this.form.get("password").value
+          }
+        }).subscribe();
+        this.router.navigate(["/store"]);
+      } catch {
+
       }
-    }).subscribe();
-    this.router.navigate(["/store"]);
+    }
   }
 
   public signup(): void {

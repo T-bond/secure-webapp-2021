@@ -1,4 +1,4 @@
-#login-card{
+#profile-card{
     margin: 80px auto;
     width: 400px;
 }
@@ -8,10 +8,15 @@
     text-align:center;
 }
 
-#query-textfield{
+#username-textfield{
     width: 100%;
 }
 
-#search-button{
+#email-textfield{
     width: 100%;
 }
+
+#logout-button{
+    width: 100%;
+}
+

@@ -42,20 +42,18 @@ export class SignupComponent implements OnInit {
   }
 
   public onSubmit(): void {
-
+    var that = this
     if (this.form.valid) {
-      try {
-        this.authApi.signUp({
-          body: {
-            username: this.form.get("username").value,
-            password: this.form.get("password").value,
-            email: this.form.get("email").value
-          }
-        }).subscribe();
-        this.router.navigate(["/login"]);
-      } catch {
-
-      }
+      this.authApi.signUp({
+        body: {
+          username: this.form.get("username").value,
+          password: this.form.get("password").value,
+          email: this.form.get("email").value
+        }
+      }).subscribe({
+        complete() { that.router.navigate(["/store"]); },
+        error() { alert("Registration failed. E-mail address was already taken.") }
+      });
     }
   }
 

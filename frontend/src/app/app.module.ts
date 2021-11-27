@@ -16,12 +16,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { RouterModule, Routes } from '@angular/router'
 import { AuthControllerService, MediaControllerService, UserControllerService } from './api/services';
 import { HttpClientModule } from '@angular/common/http';
-
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'store', component: StoreComponent }
+  { path: 'store', component: StoreComponent },
+  { path: 'profile', component: ProfileComponent }
 ]
 
 @NgModule({
@@ -30,6 +31,7 @@ const routes: Routes = [
     LoginComponent,
     StoreComponent,
     SignupComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +50,7 @@ const routes: Routes = [
   providers: [
     AuthControllerService,
     MediaControllerService,
-    UserControllerService
+    UserControllerService,
   ],
   bootstrap: [AppComponent]
 })

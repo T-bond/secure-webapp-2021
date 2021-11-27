@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthControllerService } from '../api/services';
-import { UserCreateRequestDto } from '../api/models';
 
 @Component({
   selector: 'app-login',
@@ -27,18 +26,17 @@ export class LoginComponent implements OnInit {
   }
 
   public onSubmit(): void {
+    var that = this
     if (this.form.valid) {
-      try {
-        this.authApi.signIn({
-          body: {
-            email: this.form.get("email").value,
-            password: this.form.get("password").value
-          }
-        }).subscribe();
-        this.router.navigate(["/store"]);
-      } catch {
-
-      }
+      this.authApi.signIn({
+        body: {
+          email: this.form.get("email").value,
+          password: this.form.get("password").value
+        }
+      }).subscribe({
+        complete() { that.router.navigate(["/store"]); },
+        error() { alert("Invalid login credentials.") }
+      });
     }
   }
 

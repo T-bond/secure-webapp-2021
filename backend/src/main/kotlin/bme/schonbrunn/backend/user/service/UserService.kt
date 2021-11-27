@@ -3,6 +3,7 @@ package bme.schonbrunn.backend.user.service
 import bme.schonbrunn.backend.auth.UserDetails
 import bme.schonbrunn.backend.user.dto.OwnUserDTO
 import bme.schonbrunn.backend.user.dto.UserCreateRequestDTO
+import bme.schonbrunn.backend.user.dto.UserUpdateRequestDTO
 import bme.schonbrunn.backend.user.entity.UserEntity
 import bme.schonbrunn.backend.user.exception.EmailAlreadyInUseException
 import bme.schonbrunn.backend.user.repository.UserRepository
@@ -10,17 +11,13 @@ import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder
 import org.springframework.stereotype.Service
-import javax.persistence.EntityManager
 import javax.persistence.EntityNotFoundException
-import javax.persistence.PersistenceContext
 import javax.transaction.Transactional
 
 @Service
 class UserService(
     private val userRepository: UserRepository,
     private val passwordEncoder: DelegatingPasswordEncoder,
-    @PersistenceContext
-    private val entityManager: EntityManager
 ) {
 
     fun createUser(userCreateRequest: UserCreateRequestDTO) {
@@ -63,25 +60,29 @@ class UserService(
 
         userRepository.deleteById(id);
     }
+
     @Transactional
-    fun modifyUser(id: Int, userDTO:UserCreateRequestDTO, authentication: Authentication) {
+    fun modifyUser(id: Int, userDTO: UserUpdateRequestDTO, authentication: Authentication) {
         val principal = authentication.principal
         if (principal !is UserDetails) {
             throw InternalError("Unsupported user details found")
         }
-        val user = principal.userEntity.id?.let { userRepository.getById(it) }
 
-        if (user != null && (id == user.id || user.isAdmin)) {
-            val userdata = userRepository.getById(id);
-            if(userDTO.email != null)
-                userdata.email = userDTO.email
-            if(userDTO.username != null)
-                userdata.username = userDTO.username
-            if(userDTO.password != null)
-                userdata.password = passwordEncoder.encode(userDTO.password)
+        val media = userRepository.findById(id).orElseThrow {
+            throw EntityNotFoundException()
         }
-        else {
-            throw AccessDeniedException("Can not modify other users data")
+
+        if (!principal.userEntity.isAdmin && principal.userEntity.id != media.id) {
+            throw AccessDeniedException("User can only modify their comments")
+        }
+
+        media.apply {
+            email = userDTO.email
+            username = userDTO.username
+
+            if (userDTO.password != null) {
+                password = passwordEncoder.encode(userDTO.password)
+            }
         }
     }
 }

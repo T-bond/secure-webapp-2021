@@ -8,6 +8,7 @@ import bme.schonbrunn.backend.media.repository.MediaRepository
 import bme.schonbrunn.backend.user.entity.UserEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 import javax.persistence.EntityManager
@@ -66,18 +67,22 @@ class MediaService(
             )
         )
     }
+
     @Transactional
-    fun modifyComment(id: Int, commentDto: CommentRequestDTO, authentication: Authentication) {
+    fun modifyComment(mediaId: Int, commentId: Int, commentDto: CommentRequestDTO, authentication: Authentication) {
         val principal = authentication.principal
         if (principal !is UserDetails) {
             throw InternalError("Unsupported user details found")
         }
 
-        if (!commentsRepository.existsById(id)) {
+        val comment = commentsRepository.findById(commentId).orElseThrow {
             throw EntityNotFoundException()
         }
 
-        val comment = commentsRepository.getById(id)
+        if (!principal.userEntity.isAdmin && principal.userEntity.id != comment.createdBy.id) {
+            throw AccessDeniedException("User can only modify their of comments")
+        }
+
         comment.comment = commentDto.comment
     }
 
@@ -88,14 +93,16 @@ class MediaService(
             throw InternalError("Unsupported user details found")
         }
 
-        if (!mediaRepository.existsById(id)) {
+        val media = mediaRepository.findById(id).orElseThrow {
             throw EntityNotFoundException()
         }
-        val media = mediaRepository.getById(id)
-        if(mediaDTO.title != null)
-            media.title = mediaDTO.title
-        if(mediaDTO.description != null)
-            media.description = mediaDTO.description
+
+        if (!principal.userEntity.isAdmin && principal.userEntity.id != media.createdBy.id) {
+            throw AccessDeniedException("User can only modify their of comments")
+        }
+
+        media.title = mediaDTO.title
+        media.description = mediaDTO.description
     }
 
     fun searchMedia(searchDto: SearchRequestDTO, pageable: Pageable) =

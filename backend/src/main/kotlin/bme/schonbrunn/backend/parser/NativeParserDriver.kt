@@ -3,7 +3,9 @@ package bme.schonbrunn.backend.parser
 object NativeParserDriver {
 
     init {
-        System.load(System.getProperty("user.dir") + "/" + libName())
+        println(System.getProperty("user.dir") + "\\" + libName())
+        System.loadLibrary(System.getProperty("user.dir") + "\\" + libName())
+
     }
 
     external fun parse(file: String): CAFF?

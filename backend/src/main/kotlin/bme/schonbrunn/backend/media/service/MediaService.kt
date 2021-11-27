@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service
 import javax.persistence.EntityManager
 import javax.persistence.EntityNotFoundException
 import javax.persistence.PersistenceContext
+import javax.transaction.Transactional
 
 
 @Service
@@ -65,6 +66,37 @@ class MediaService(
             )
         )
     }
+    @Transactional
+    fun modifyComment(id: Int, commentDto: CommentRequestDTO, authentication: Authentication) {
+        val principal = authentication.principal
+        if (principal !is UserDetails) {
+            throw InternalError("Unsupported user details found")
+        }
+
+        if (!commentsRepository.existsById(id)) {
+            throw EntityNotFoundException()
+        }
+
+        val comment = commentsRepository.getById(id)
+        comment.comment = commentDto.comment
+    }
+
+    @Transactional
+    fun modifyMedia(id: Int, mediaDTO: ModifyMediaDTO, authentication: Authentication) {
+        val principal = authentication.principal
+        if (principal !is UserDetails) {
+            throw InternalError("Unsupported user details found")
+        }
+
+        if (!mediaRepository.existsById(id)) {
+            throw EntityNotFoundException()
+        }
+        val media = mediaRepository.getById(id)
+        if(mediaDTO.title != null)
+            media.title = mediaDTO.title
+        if(mediaDTO.description != null)
+            media.description = mediaDTO.description
+    }
 
     fun searchMedia(searchDto: SearchRequestDTO, pageable: Pageable) =
         mediaRepository.findAllByTitleContainingIgnoreCase(searchDto.titleContains, pageable).map {
@@ -86,5 +118,4 @@ class MediaService(
 
         commentsRepository.deleteById(commentId);
     }
-
 }

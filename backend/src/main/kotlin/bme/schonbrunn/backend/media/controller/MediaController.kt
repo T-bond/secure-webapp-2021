@@ -1,6 +1,7 @@
 package bme.schonbrunn.backend.media.controller
 
 import bme.schonbrunn.backend.media.dto.CommentRequestDTO
+import bme.schonbrunn.backend.media.dto.ModifyMediaDTO
 import bme.schonbrunn.backend.media.dto.SearchRequestDTO
 import bme.schonbrunn.backend.media.service.MediaService
 import org.springdoc.api.annotations.ParameterObject
@@ -51,6 +52,24 @@ class MediaController(
         commentDto: CommentRequestDTO,
         authentication: Authentication,
     ) = mediaService.createComment(id, commentDto, authentication)
+
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @PutMapping("{id}/comments")
+    fun modifyComment(
+        @PathVariable id: Int,
+        @Valid
+        commentDto: CommentRequestDTO,
+        authentication: Authentication,
+    ) = mediaService.modifyComment(id, commentDto, authentication)
+
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @PutMapping("{id}")
+    fun modifyMedia(
+        @PathVariable id: Int,
+        @Valid
+        mediaDTO: ModifyMediaDTO,
+        authentication: Authentication,
+    ) = mediaService.modifyMedia(id, mediaDTO, authentication)
 
     @GetMapping("search")
     fun searchMediaByTitle(

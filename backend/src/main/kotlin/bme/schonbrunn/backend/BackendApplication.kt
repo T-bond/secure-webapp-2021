@@ -8,12 +8,12 @@ import org.springframework.boot.runApplication
 class BackendApplication
 
 fun main(args: Array<String>) {
-    NativeParserDriver // Initialize native parser library
+    /*NativeParserDriver // Initialize native parser library
 
     val caff = NativeParserDriver.parse("1.caff")
     println(caff)
     val preview = NativeParserDriver.preview("1.caff", "test.gif")
-    println(preview)
+    println(preview)*/
 
     runApplication<BackendApplication>(*args)
 }

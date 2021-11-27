@@ -10,12 +10,17 @@ import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder
 import org.springframework.stereotype.Service
+import javax.persistence.EntityManager
 import javax.persistence.EntityNotFoundException
+import javax.persistence.PersistenceContext
+import javax.transaction.Transactional
 
 @Service
 class UserService(
     private val userRepository: UserRepository,
     private val passwordEncoder: DelegatingPasswordEncoder,
+    @PersistenceContext
+    private val entityManager: EntityManager
 ) {
 
     fun createUser(userCreateRequest: UserCreateRequestDTO) {
@@ -58,5 +63,25 @@ class UserService(
 
         userRepository.deleteById(id);
     }
+    @Transactional
+    fun modifyUser(id: Int, userDTO:UserCreateRequestDTO, authentication: Authentication) {
+        val principal = authentication.principal
+        if (principal !is UserDetails) {
+            throw InternalError("Unsupported user details found")
+        }
+        val user = principal.userEntity.id?.let { userRepository.getById(it) }
 
+        if (user != null && (id == user.id || user.isAdmin)) {
+            val userdata = userRepository.getById(id);
+            if(userDTO.email != null)
+                userdata.email = userDTO.email
+            if(userDTO.username != null)
+                userdata.username = userDTO.username
+            if(userDTO.password != null)
+                userdata.password = passwordEncoder.encode(userDTO.password)
+        }
+        else {
+            throw AccessDeniedException("Can not modify other users data")
+        }
+    }
 }

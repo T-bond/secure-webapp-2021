@@ -71,4 +71,20 @@ class MediaService(
             MediaDTO.from(it)
         }
 
+    fun deleteMediaFile(id: Int) {
+        if (!mediaRepository.existsById(id)) {
+            throw EntityNotFoundException()
+        }
+
+        mediaRepository.deleteById(id);
+    }
+
+    fun deleteComment(mediaId: Int, commentId: Int) {
+        if (!commentsRepository.existsById(commentId)) {
+            throw EntityNotFoundException()
+        }
+
+        commentsRepository.deleteById(commentId);
+    }
+
 }

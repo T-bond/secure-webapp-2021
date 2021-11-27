@@ -10,6 +10,7 @@ import org.springframework.data.web.SortDefault
 import org.springframework.data.web.SortDefault.SortDefaults
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
@@ -58,5 +59,16 @@ class MediaController(
         @ParameterObject
         pageable: Pageable
     ) = mediaService.searchMedia(searchDto, pageable)
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("{id}")
+    fun deleteMediaFile(@PathVariable id: Int) = mediaService.deleteMediaFile(id)
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("{mediaId}/comments/{commentId}")
+    fun deleteComment(@PathVariable mediaId: Int, @PathVariable commentId: Int) =
+        mediaService.deleteComment(mediaId, commentId)
 
 }

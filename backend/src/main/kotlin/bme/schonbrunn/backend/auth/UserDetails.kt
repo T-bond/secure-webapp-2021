@@ -11,9 +11,9 @@ class UserDetails(
         listOf(
             SimpleGrantedAuthority(
                 if (userEntity.isAdmin)
-                    "USER"
-                else
                     "ADMIN"
+                else
+                    "USER"
             )
         )
 

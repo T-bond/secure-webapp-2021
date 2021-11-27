@@ -1,31 +1,23 @@
 package bme.schonbrunn.backend.user.controller
 
-import bme.schonbrunn.backend.auth.UserDetails
-import bme.schonbrunn.backend.user.dto.OwnUserDTO
-import bme.schonbrunn.backend.user.repository.UserRepository
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import bme.schonbrunn.backend.user.service.UserService
+import org.springframework.http.HttpStatus
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.Authentication
+import org.springframework.web.bind.annotation.*
 
 
 @RestController
 @RequestMapping("users")
 class UserController(
-    private val userRepository: UserRepository,
+    private val userService: UserService,
 ) {
 
     @GetMapping("me")
-    fun getOwnProfile(): OwnUserDTO {
-        val principal = SecurityContextHolder.getContext().authentication.principal
+    fun getOwnProfile(authentication: Authentication) = userService.getMe(authentication)
 
-        val userEntity = if (principal is UserDetails) {
-            principal.userEntity
-        } else {
-            val email = principal.toString()
-            userRepository.findByEmail(email)!!
-        }
-
-        return OwnUserDTO.from(userEntity)
-    }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("{id}")
+    fun deleteUser(@PathVariable id: Int, authentication: Authentication) = userService.deleteUser(id, authentication)
 }

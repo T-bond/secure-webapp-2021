@@ -3,15 +3,15 @@ package bme.schonbrunn.backend.media.dto
 import bme.schonbrunn.backend.media.entity.MediaEntity
 import java.time.OffsetDateTime
 
-data class MediaDTO(
+data class SingleMediaDTO(
     val id: Int,
     val title: String,
     val description: String,
     val createdAt: OffsetDateTime,
-    val createdBy: CreatorDTO
+    val createdBy: CreatorDTO,
 ) {
     companion object {
-        fun from(mediaEntity: MediaEntity) = MediaDTO(
+        fun from(mediaEntity: MediaEntity) = SingleMediaDTO(
             id = mediaEntity.id!!,
             title = mediaEntity.title,
             description = mediaEntity.description,

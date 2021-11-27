@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
 
             std::cout << "Caption: " << std::endl;
             unsigned frameIdx = 0;
-            for (auto caption: caff.getCaption()) {
+            for (auto caption: caff.getCaptions()) {
                 std::cout << "  Frame " << frameIdx << ":" << caption << std::endl;
                 frameIdx++;
             }

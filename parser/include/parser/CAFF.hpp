@@ -18,10 +18,10 @@ public:
     [[nodiscard]]
     bool isValid() const { return valid; };
 
-    void writePreview(char *filePath);
+    void writePreview(const char *filePath);
 
     [[nodiscard]]
-    std::string_view getCreator() const { return createdBy; };
+    const std::string & getCreator() const { return createdBy; };
 
     [[nodiscard]]
     const auto& getCreatedAt() const { return createdAt; };
@@ -33,7 +33,7 @@ public:
     int64_t getHeight() const { return height; };
 
     [[nodiscard]]
-    std::vector<std::string_view> getCaption() const;
+    std::vector<std::string_view> getCaptions() const;
 
     [[nodiscard]]
     std::vector<std::vector<std::string>> getTags() const;
@@ -64,7 +64,7 @@ private:
     void parseCredits(std::istream& caffContent);
     void parseFrame(std::istream& caffContent);
 
-    static uint64_t extractBlockInformation(std::istream& caffContent, const BlockID &blockId) ;
+    static uint64_t extractBlockInformation(std::istream& caffContent, const BlockID &blockId);
 };
 
 

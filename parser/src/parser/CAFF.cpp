@@ -7,7 +7,7 @@ CAFF::CAFF(std::istream& caffContent) {
 	valid = true;
 }
 
-void CAFF::writePreview(char *filePath) {
+void CAFF::writePreview(const char *filePath) {
 
     GifWriter g;
     GifBegin(&g, filePath, width, height, /* will specify delay for each image */ 0);
@@ -189,7 +189,7 @@ uint64_t CAFF::extractBlockInformation(std::istream& caffContent, const CAFF::Bl
 }
 
 [[nodiscard]]
-std::vector<std::string_view> CAFF::getCaption() const {
+std::vector<std::string_view> CAFF::getCaptions() const {
     std::vector<std::string_view> caption;
 
     for (auto& frame : frames) {

@@ -1,10 +1,7 @@
 package bme.schonbrunn.backend.media.service
 
 import bme.schonbrunn.backend.auth.UserDetails
-import bme.schonbrunn.backend.media.dto.CommentDTO
-import bme.schonbrunn.backend.media.dto.CommentRequestDTO
-import bme.schonbrunn.backend.media.dto.MediaDTO
-import bme.schonbrunn.backend.media.dto.SingleMediaDTO
+import bme.schonbrunn.backend.media.dto.*
 import bme.schonbrunn.backend.media.entity.CommentEntity
 import bme.schonbrunn.backend.media.repository.CommentRepository
 import bme.schonbrunn.backend.media.repository.MediaRepository
@@ -68,5 +65,10 @@ class MediaService(
             )
         )
     }
+
+    fun searchMedia(searchDto: SearchRequestDTO, pageable: Pageable) =
+        mediaRepository.findAllByTitleContainingIgnoreCase(searchDto.titleContains, pageable).map {
+            MediaDTO.from(it)
+        }
 
 }

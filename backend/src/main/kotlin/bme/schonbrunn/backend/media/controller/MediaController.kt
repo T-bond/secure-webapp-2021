@@ -1,6 +1,7 @@
 package bme.schonbrunn.backend.media.controller
 
 import bme.schonbrunn.backend.media.dto.CommentRequestDTO
+import bme.schonbrunn.backend.media.dto.SearchRequestDTO
 import bme.schonbrunn.backend.media.service.MediaService
 import org.springdoc.api.annotations.ParameterObject
 import org.springframework.data.domain.Pageable
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 
 @RestController
@@ -44,8 +46,17 @@ class MediaController(
     @PostMapping("{id}/comments")
     fun createComment(
         @PathVariable id: Int,
+        @Valid
         commentDto: CommentRequestDTO,
         authentication: Authentication,
     ) = mediaService.createComment(id, commentDto, authentication)
+
+    @GetMapping("search")
+    fun searchMediaByTitle(
+        @Valid
+        searchDto: SearchRequestDTO,
+        @ParameterObject
+        pageable: Pageable
+    ) = mediaService.searchMedia(searchDto, pageable)
 
 }

@@ -12,10 +12,10 @@ class MediaEntity(
     @GeneratedValue
     var id: Int? = null,
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     var title: String,
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 500)
     var description: String,
 
     @ManyToOne(optional = false)

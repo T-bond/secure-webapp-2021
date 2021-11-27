@@ -1,4 +1,4 @@
-#include "JNI.h"
+#include "JavaBindings.h"
 
 #include "parser/CAFF.hpp"
 
@@ -70,7 +70,6 @@ Java_bme_schonbrunn_backend_parser_NativeParserDriver_parse(JNIEnv* env, jobject
 
 JNIEXPORT bool JNICALL
 Java_bme_schonbrunn_backend_parser_NativeParserDriver_preview(JNIEnv* env, jobject thisObject, jstring input, jstring output) {
-	std::unique_ptr<CAFF> caff;
 	std::ifstream caffFile(env->GetStringUTFChars(input, nullptr), std::ios::binary);
 	try {
 		CAFF caff(caffFile);

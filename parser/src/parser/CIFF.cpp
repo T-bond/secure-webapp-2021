@@ -1,6 +1,7 @@
 #include "parser/CIFF.hpp"
 
 #include <iostream>
+#include <string>
 
 CIFF::CIFF(std::istream& ciffContent) {
 		parseHeader(ciffContent);

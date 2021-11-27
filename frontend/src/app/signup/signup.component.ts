@@ -35,7 +35,7 @@ export class SignupComponent implements OnInit {
         password: this.form.get("password").value,
         email: this.form.get("email").value
       }
-    });
+    }).subscribe();
     this.router.navigate(["/login"]);
   }
 

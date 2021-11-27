@@ -8,7 +8,14 @@ class UserDetails(
     val userEntity: UserEntity,
 ) : SpringUserDetails {
     override fun getAuthorities() =
-        listOf(SimpleGrantedAuthority("USER"))
+        listOf(
+            SimpleGrantedAuthority(
+                if (userEntity.isAdmin)
+                    "USER"
+                else
+                    "ADMIN"
+            )
+        )
 
     override fun getPassword() = userEntity.password
 

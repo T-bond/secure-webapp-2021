@@ -3,7 +3,13 @@ package bme.schonbrunn.backend.user.entity
 import javax.persistence.*
 
 @Entity(name = "UserEntity")
-@Table(name = "users")
+@Table(
+    name = "users",
+    uniqueConstraints = [
+        UniqueConstraint(columnNames = ["email"]),
+    ]
+)
+
 class UserEntity(
     @Id
     @GeneratedValue
@@ -17,4 +23,6 @@ class UserEntity(
 
     @Column(nullable = false)
     var password: String,
+
+    var isAdmin: Boolean = false
 )

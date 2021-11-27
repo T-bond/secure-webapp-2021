@@ -1,4 +1,4 @@
-#login-card{
+#signup-card{
     margin: 80px auto;
     width: 400px;
 }
@@ -9,18 +9,22 @@
 }
 
 #username-textfield{
-    width: 61%;
-}
-
-#password-textfield{
     width: 39%;
 }
 
-#signup-button{
-    width: 50%;
+#password-textfield{
+    width: 61%;
+}
+
+#email-textfield{
+    width: 100%;
 }
 
 #login-button{
+    width: 50%;
+}
+
+#signup-button{
     width: 50%;
 }
 

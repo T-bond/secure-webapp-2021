@@ -5,12 +5,12 @@ import { AuthControllerService } from '../api/services';
 import { UserCreateRequestDto } from '../api/models';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.scss']
 })
-export class LoginComponent implements OnInit {
-  
+export class SignupComponent implements OnInit {
+
   form: FormGroup;
 
   constructor(
@@ -21,22 +21,25 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this._formBuilder.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required]
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+      email: ['', Validators.required]
     });
   }
 
   public onSubmit(): void {
-    this.authApi.signIn({
+
+    this.authApi.signUp({
       body: {
-        email: this.form.get("email").value,
-        password: this.form.get("password").value
+        username: this.form.get("username").value,
+        password: this.form.get("password").value,
+        email: this.form.get("email").value
       }
     });
-    this.router.navigate(["/store"]);
+    this.router.navigate(["/login"]);
   }
 
-  public signup(): void {
-    this.router.navigate(["/signup"])
+  public login(): void {
+    this.router.navigate(["/login"]);
   }
 }

@@ -113,7 +113,7 @@ class PathParameter extends Parameter {
     return path;
   }
 
-  serializeValue(value: any, separator = ','): string {
+  override serializeValue(value: any, separator = ','): string {
     var result = typeof value === 'string' ? encodeURIComponent(value) : super.serializeValue(value, separator);
     result = result.replace('%3D', '=');
     result = result.replace('%3B', ';');

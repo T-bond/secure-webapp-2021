@@ -2,17 +2,16 @@
   <mat-card>
     <mat-card-content>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <h2>Welcome to the CAFF store</h2>
-        <mat-error>
-            Invalid login.
-        </mat-error>
-        <mat-form-field class="full-width-input">
-          <input matInput placeholder="username" formControlName="username" required>
+        <h2 id="welcome-message" >Welcome to the CAFF store!</h2>
+        <mat-form-field id="username-textfield" class="full-width-input">
+          <input matInput type="email" placeholder="email address" formControlName="email" required>
         </mat-form-field>
-        <mat-form-field class="full-width-input">
+        <mat-form-field id="password-textfield" class="full-width-input">
           <input matInput type="password" placeholder="password" formControlName="password" required>
-        </mat-form-field>
-        <button mat-button color="primary">Log in</button>
+        </mat-form-field><br>
+        <!-- type="button" = button does not submit the form-->
+        <button id="signup-button" mat-stroked-button color="primary" type="button" (click)="signup()">Sign up</button>
+        <button id="login-button" mat-stroked-button color="primary">Log in</button>
       </form>
     </mat-card-content>
   </mat-card>

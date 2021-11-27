@@ -88,7 +88,7 @@ export class AuthControllerService extends BaseService {
     if (params) {
       rb.body(params.body, 'application/json');
     }
-
+    
     return this.http.request(rb.build({
       responseType: 'text',
       accept: '*/*'

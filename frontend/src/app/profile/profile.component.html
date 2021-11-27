@@ -1,0 +1,14 @@
+<div id="profile-card">
+    <mat-card>
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="logOut()">
+          <h2 id="welcome-message">My profile</h2>
+          <b>Username:</b>
+          <div id="username-container"></div>
+          <b>Email:</b>
+          <div id="email-container"></div>
+          <button id="logout-button" mat-stroked-button color="primary">Log out</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>

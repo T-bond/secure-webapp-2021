@@ -1,0 +1,21 @@
+<!-- Toolbar -->
+<mat-toolbar color="primary">
+  <img
+    width="40"
+    alt="Angular Logo"
+    src="assets/images/cafflogo.svg"
+  />
+  <div>CAFF store</div>
+  <div id="current-user">
+    <form [formGroup]="form" (ngSubmit)="profile()">
+    <button id="profile-button" mat-stroked-button>
+      <span id="current-user-display"></span>
+    </button>
+    </form>
+  </div>
+</mat-toolbar>
+
+<div class="content" role="main">
+  <router-outlet>
+  </router-outlet>
+</div>

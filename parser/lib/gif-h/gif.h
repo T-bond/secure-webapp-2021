@@ -136,7 +136,7 @@ void GifGetClosestPaletteColor( GifPalette* pPal, int r, int g, int b, int* best
     }
 }
 
-void GifSwapPixels(uint8_t* image, int pixA, int pixB, uint imageSize)
+void GifSwapPixels(uint8_t* image, int pixA, int pixB, unsigned imageSize)
 {
     assert(pixA*4+3 < imageSize);
     assert(pixB*4+3 < imageSize);
@@ -163,7 +163,7 @@ void GifSwapPixels(uint8_t* image, int pixA, int pixB, uint imageSize)
 }
 
 // just the partition operation from quicksort
-int GifPartition(uint8_t* image, const int left, const int right, const int elt, int pivotIndex, uint imageSize)
+int GifPartition(uint8_t* image, const int left, const int right, const int elt, int pivotIndex, unsigned imageSize)
 {
     const int pivotValue = image[pivotIndex*4+elt];
     GifSwapPixels(image, pivotIndex, right-1, imageSize);
@@ -192,7 +192,7 @@ int GifPartition(uint8_t* image, const int left, const int right, const int elt,
 }
 
 // Perform an incomplete sort, finding all elements above and below the desired median
-void GifPartitionByMedian(uint8_t* image, int left, int right, int com, int neededCenter, uint imageSize)
+void GifPartitionByMedian(uint8_t* image, int left, int right, int com, int neededCenter, unsigned imageSize)
 {
     if(left < right-1)
     {
@@ -210,7 +210,7 @@ void GifPartitionByMedian(uint8_t* image, int left, int right, int com, int need
 }
 
 // Builds a palette by creating a balanced k-d tree of all pixels in the image
-void GifSplitPalette(uint8_t* image, int numPixels, int firstElt, int lastElt, int splitElt, int splitDist, int treeNode, bool buildForDither, GifPalette* pal, uint imageSize)
+void GifSplitPalette(uint8_t* image, int numPixels, int firstElt, int lastElt, int splitElt, int splitDist, int treeNode, bool buildForDither, GifPalette* pal, unsigned imageSize)
 {
     if(lastElt <= firstElt || numPixels == 0)
         return;
@@ -361,7 +361,7 @@ void GifMakePalette( const uint8_t* lastFrame, const uint8_t* nextFrame, uint32_
 
     // SplitPalette is destructive (it sorts the pixels by color) so
     // we must create a copy of the image for it to destroy
-    auto imageSize = (uint)(width * height * 4 * sizeof(uint8_t));
+    auto imageSize = (unsigned)(width * height * 4 * sizeof(uint8_t));
     auto* destroyableImage = (uint8_t*)GIF_TEMP_MALLOC(imageSize);
     memcpy(destroyableImage, nextFrame, imageSize);
 

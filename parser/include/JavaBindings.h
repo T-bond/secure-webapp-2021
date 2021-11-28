@@ -1,7 +1,7 @@
 #include <jni.h>
 
-#ifndef _Included_bme_schonbrunn_backend_CAFF
-#define _Included_bme_schonbrunn_backend_CAFF
+#ifndef BACKEND_JAVABINDINGS_H
+#define BACKEND_JAVABINDINGS_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -14,4 +14,4 @@ JNIEXPORT bool JNICALL Java_bme_schonbrunn_backend_parser_NativeParserDriver_pre
 #ifdef __cplusplus
 }
 #endif
-#endif
+#endif // BACKEND_JAVABINDINGS_H

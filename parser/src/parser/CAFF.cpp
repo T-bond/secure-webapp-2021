@@ -1,6 +1,11 @@
 #include "parser/CAFF.hpp"
 #include <iostream>
 #include <gif.h>
+#include <string>
+
+#if defined(_WIN32) && !defined(_XOPEN_SOURCE)
+#define timezone _timezone
+#endif
 
 CAFF::CAFF(std::istream& caffContent) {
 	parseBlocks(caffContent);

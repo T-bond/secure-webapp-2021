@@ -54,19 +54,24 @@ class MediaController(
     ) = mediaService.createComment(id, commentDto, authentication)
 
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @PutMapping("{id}/comments")
+    @PutMapping("{mediaId}/comments/{commentId}")
     fun modifyComment(
-        @PathVariable id: Int,
+        @PathVariable
+        mediaId: Int,
+        @PathVariable
+        commentId: Int,
         @Valid
+        @RequestBody
         commentDto: CommentRequestDTO,
         authentication: Authentication,
-    ) = mediaService.modifyComment(id, commentDto, authentication)
+    ) = mediaService.modifyComment(mediaId, commentId, commentDto, authentication)
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping("{id}")
     fun modifyMedia(
         @PathVariable id: Int,
         @Valid
+        @RequestBody
         mediaDTO: ModifyMediaDTO,
         authentication: Authentication,
     ) = mediaService.modifyMedia(id, mediaDTO, authentication)

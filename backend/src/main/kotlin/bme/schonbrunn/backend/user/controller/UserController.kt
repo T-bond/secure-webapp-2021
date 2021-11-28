@@ -1,7 +1,6 @@
 package bme.schonbrunn.backend.user.controller
 
-import bme.schonbrunn.backend.media.dto.CommentRequestDTO
-import bme.schonbrunn.backend.user.dto.UserCreateRequestDTO
+import bme.schonbrunn.backend.user.dto.UserUpdateRequestDTO
 import bme.schonbrunn.backend.user.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.prepost.PreAuthorize
@@ -24,9 +23,10 @@ class UserController(
     fun modifyUser(
         @PathVariable id: Int,
         @Valid
-        userDTO: UserCreateRequestDTO,
+        @RequestBody
+        userDTO: UserUpdateRequestDTO,
         authentication: Authentication
-    ) = userService.modifyUser(id,userDTO, authentication)
+    ) = userService.modifyUser(id, userDTO, authentication)
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)

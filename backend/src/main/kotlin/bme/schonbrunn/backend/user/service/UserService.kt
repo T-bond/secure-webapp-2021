@@ -1,11 +1,11 @@
 package bme.schonbrunn.backend.user.service
 
 import bme.schonbrunn.backend.auth.UserDetails
+import bme.schonbrunn.backend.media.exception.EmailAlreadyInUseException
 import bme.schonbrunn.backend.user.dto.OwnUserDTO
 import bme.schonbrunn.backend.user.dto.UserCreateRequestDTO
 import bme.schonbrunn.backend.user.dto.UserUpdateRequestDTO
 import bme.schonbrunn.backend.user.entity.UserEntity
-import bme.schonbrunn.backend.user.exception.EmailAlreadyInUseException
 import bme.schonbrunn.backend.user.repository.UserRepository
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.Authentication

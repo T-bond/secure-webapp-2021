@@ -5,7 +5,14 @@ import java.io.File
 object NativeParserDriver {
 
     init {
-        System.load(System.getProperty("user.dir") + File.separatorChar + libName())
+        try {
+            System.loadLibrary("parser")
+        } catch (ignored: UnsatisfiedLinkError) {
+            val workdir = System.getProperty("user.dir")
+            val libsDir = File.separatorChar + "libs" + File.separatorChar
+
+            System.load(workdir + libsDir + libName())
+        }
     }
 
     external fun parse(file: String): CAFF?

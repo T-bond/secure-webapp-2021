@@ -4,11 +4,11 @@ import bme.schonbrunn.backend.auth.UserDetails
 import bme.schonbrunn.backend.media.dto.*
 import bme.schonbrunn.backend.media.entity.CommentEntity
 import bme.schonbrunn.backend.media.entity.MediaEntity
+import bme.schonbrunn.backend.media.exception.InvalidCaffFileException
 import bme.schonbrunn.backend.media.repository.CommentRepository
 import bme.schonbrunn.backend.media.repository.MediaRepository
 import bme.schonbrunn.backend.parser.NativeParserDriver
 import bme.schonbrunn.backend.user.entity.UserEntity
-import bme.schonbrunn.backend.user.exception.InvalidCaffFileException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.data.domain.Page

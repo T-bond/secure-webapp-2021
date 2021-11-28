@@ -1,7 +1,7 @@
 package bme.schonbrunn.backend.configuration
 
-import bme.schonbrunn.backend.media.exception.EmailAlreadyInUseException
-import bme.schonbrunn.backend.user.exception.InvalidCaffFileException
+import bme.schonbrunn.backend.media.exception.InvalidCaffFileException
+import bme.schonbrunn.backend.user.exception.EmailAlreadyInUseException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler

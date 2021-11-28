@@ -28,5 +28,6 @@
     "strictInputAccessModifiers": false,
     "strictTemplates": false
     ,"strictPropertyInitialization": false,
+    "experimentalDecorators": true
   }
 }

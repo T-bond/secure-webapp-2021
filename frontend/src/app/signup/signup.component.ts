@@ -51,7 +51,7 @@ export class SignupComponent implements OnInit {
           email: this.form.get("email").value
         }
       }).subscribe({
-        complete() { that.router.navigate(["/store"]); },
+        complete() { that.router.navigate(["/login"]); },
         error() { alert("Registration failed. E-mail address was already taken.") }
       });
     }

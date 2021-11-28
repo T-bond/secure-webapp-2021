@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "backend.store.caffs",
+      "type": "java.lang.String",
+      "description": "Path to store the uploaded CAFF files."
+    },
+    {
+      "name": "backend.store.previews",
+      "type": "java.lang.String",
+      "description": "Path to store the generated preview files."
+    }
+  ]
+}

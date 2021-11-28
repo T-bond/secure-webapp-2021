@@ -23,7 +23,10 @@ class MediaEntity(
     var description: String,
 
     @ManyToOne(optional = false)
-    var createdBy: UserEntity
+    var createdBy: UserEntity,
+
+    @Column(nullable = false)
+    val mediaName: String,
 ) {
 
     @CreationTimestamp

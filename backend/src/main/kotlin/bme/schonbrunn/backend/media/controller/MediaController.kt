@@ -1,6 +1,7 @@
 package bme.schonbrunn.backend.media.controller
 
 import bme.schonbrunn.backend.media.dto.CommentRequestDTO
+import bme.schonbrunn.backend.media.dto.CreateMediaRequestDTO
 import bme.schonbrunn.backend.media.dto.ModifyMediaDTO
 import bme.schonbrunn.backend.media.dto.SearchRequestDTO
 import bme.schonbrunn.backend.media.service.MediaService
@@ -10,10 +11,12 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.web.SortDefault
 import org.springframework.data.web.SortDefault.SortDefaults
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 import javax.validation.Valid
 
 
@@ -95,4 +98,19 @@ class MediaController(
     fun deleteComment(@PathVariable mediaId: Int, @PathVariable commentId: Int) =
         mediaService.deleteComment(mediaId, commentId)
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping(
+        consumes = [MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE]
+    )
+    fun createNewAttachment(
+        @RequestPart("data") @Valid mediaData: CreateMediaRequestDTO,
+        @RequestPart("file") multipartFile: MultipartFile,
+        authentication: Authentication,
+    ) = mediaService.createMedia(mediaData, multipartFile, authentication)
+
+    @GetMapping("{id}/raw")
+    fun downloadCAFFFile(@PathVariable id: Int) = mediaService.getCAFF(id)
+
+    @GetMapping("{id}/preview")
+    fun downloadPreviewFile(@PathVariable id: Int) = mediaService.getPreview(id)
 }

@@ -5,7 +5,7 @@ This repository contains our web secure application implemented for the 2021 com
 ### Secure web app
 
 ```diff
-+Artifacts created for the 3nd phase of the home assignment can be found in the `frontend` and `backend` directories:
++Artifacts created for the 3rd phase of the home assignment can be found in the `frontend` and `backend` directories:
 ```
 https://github.com/aldr4fu/secure-webapp-2021/tree/main/frontend
 

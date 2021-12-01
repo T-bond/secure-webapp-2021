@@ -18,13 +18,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { ProfileComponent } from './profile/profile.component';
 import { UploadComponent } from './upload/upload.component';
 import { MediaComponent } from './media/media.component';
+import { StoreItemComponent } from './store-item/store-item.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'store', component: StoreComponent },
   { path: 'upload', component: UploadComponent },
-  { path: 'profile', component: ProfileComponent }
+  { path: 'profile', component: ProfileComponent },
+  { path: 'media/:id', component: MediaComponent }
 ]
 
 @NgModule({
@@ -35,7 +37,8 @@ const routes: Routes = [
     SignupComponent,
     ProfileComponent,
     UploadComponent,
-    MediaComponent
+    MediaComponent,
+    StoreItemComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +48,6 @@ const routes: Routes = [
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatPaginatorModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

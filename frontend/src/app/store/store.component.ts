@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, ComponentFactoryResolver, ApplicationRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiConfiguration } from '../api/api-configuration';
+import { StoreItemComponent } from '../store-item/store-item.component';
 
 @Component({
   selector: 'app-login',
@@ -14,11 +15,14 @@ export class StoreComponent implements OnInit {
   public currentPage = 0;
   public totalSize = 0;
   form: FormGroup;
+  @ViewChild("resultsContainer", {read: ViewContainerRef}) resultsContainer: ViewContainerRef;
 
   constructor(
     private _formBuilder: FormBuilder,
     private router: Router,
-    private apiConfiguration: ApiConfiguration
+    private apiConfiguration: ApiConfiguration,
+    private resolver: ComponentFactoryResolver,
+    private applicationRef: ApplicationRef
   ) { }
 
   ngOnInit(): void {
@@ -33,7 +37,18 @@ export class StoreComponent implements OnInit {
   } 
 
   public displayItems(items) {
-
+    var componentFactory = this.resolver.resolveComponentFactory(StoreItemComponent);
+    if (items.length > 0) {
+      items.forEach(item => {
+        var storeItemComponent = this.resultsContainer.createComponent(componentFactory);
+        storeItemComponent.instance.id = item.id;
+        storeItemComponent.instance.title = item.title;
+        storeItemComponent.instance.description = item.description;
+        storeItemComponent.instance.createdAt = item.createdAt;
+        storeItemComponent.instance.createdBy = item.createdBy.username;
+      });
+    }
+    this.applicationRef.tick();
   }
 
   public onSubmit(): void {
@@ -43,7 +58,6 @@ export class StoreComponent implements OnInit {
     req.addEventListener("load", () => {
       if (req.response) {
         var res = JSON.parse(req.response);
-        console.log(req.response);
         this.displayItems(res.content);
       } else {
         alert("Something unexpected happened.");

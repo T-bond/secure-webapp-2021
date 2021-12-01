@@ -21,8 +21,7 @@ export class StoreComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private router: Router,
     private apiConfiguration: ApiConfiguration,
-    private resolver: ComponentFactoryResolver,
-    private applicationRef: ApplicationRef
+    private resolver: ComponentFactoryResolver
   ) { }
 
   ngOnInit(): void {
@@ -49,7 +48,6 @@ export class StoreComponent implements OnInit {
         storeItemComponent.instance.createdBy = item.createdBy.username;
       });
     }
-    this.applicationRef.tick();
   }
 
   public onSubmit(): void {
@@ -59,11 +57,11 @@ export class StoreComponent implements OnInit {
         var res = JSON.parse(req.response);
         this.displayItems(res.content);
       } else {
-        alert("Something unexpected happened.");
+        alert("Error: unable to reach REST backend.");
       }
     });
     req.addEventListener("error", () => {
-      alert("Something unexpected happened.");
+      alert("Error: unable to reach REST backend.");
     });
     req.open("GET", this.apiConfiguration.rootUrl + "/medias/search?size=65535&titleContains=" + this.form.get("query").value);
     req.send();

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -17,12 +16,18 @@ import { RouterModule, Routes } from '@angular/router'
 import { AuthControllerService, MediaControllerService, UserControllerService } from './api/services';
 import { HttpClientModule } from '@angular/common/http';
 import { ProfileComponent } from './profile/profile.component';
+import { UploadComponent } from './upload/upload.component';
+import { MediaComponent } from './media/media.component';
+import { StoreItemComponent } from './store-item/store-item.component';
+import { CommentComponent } from './comment/comment.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'store', component: StoreComponent },
-  { path: 'profile', component: ProfileComponent }
+  { path: 'upload', component: UploadComponent },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'media/:id', component: MediaComponent }
 ]
 
 @NgModule({
@@ -31,7 +36,11 @@ const routes: Routes = [
     LoginComponent,
     StoreComponent,
     SignupComponent,
-    ProfileComponent
+    ProfileComponent,
+    UploadComponent,
+    MediaComponent,
+    StoreItemComponent,
+    CommentComponent
   ],
   imports: [
     BrowserModule,

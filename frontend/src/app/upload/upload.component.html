@@ -1,0 +1,23 @@
+<div id="upload-card">
+    <mat-card>
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <h2 id="welcome-message" >Upload your CAFF file</h2>
+          <mat-form-field id="title-textfield" class="full-width-input">
+            <input matInput formControlName="title" placeholder="title" required>
+          </mat-form-field><br>
+          <mat-form-field id="description-textfield" class="full-width-input">
+            <input matInput formControlName="description" placeholder="description" required>
+          </mat-form-field>
+          <div id="file-card">
+            <mat-card>
+              <mat-card-content>
+                <input type="file" #file id="file" formControlName="file" accept=".caff"/>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          <button id="upload-button" mat-stroked-button color="primary">Upload</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthControllerService } from '../api/services';
-import { UserCreateRequestDto } from '../api/models';
 
 @Component({
   selector: 'app-signup',
@@ -52,7 +51,7 @@ export class SignupComponent implements OnInit {
         }
       }).subscribe({
         complete() { that.router.navigate(["/login"]); },
-        error() { alert("Registration failed. E-mail address was already taken.") }
+        error() { alert("Registration failed. E-mail address was already taken."); alert("Operators: Did you set the address of the REST backend in /app/api/api-configuration.ts?") }
       });
     }
   }

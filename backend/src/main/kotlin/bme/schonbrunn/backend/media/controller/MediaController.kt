@@ -52,6 +52,7 @@ class MediaController(
     fun createComment(
         @PathVariable id: Int,
         @Valid
+        @RequestBody
         commentDto: CommentRequestDTO,
         authentication: Authentication,
     ) = mediaService.createComment(id, commentDto, authentication)

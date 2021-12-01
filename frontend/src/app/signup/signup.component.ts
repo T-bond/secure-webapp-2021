@@ -52,7 +52,7 @@ export class SignupComponent implements OnInit {
         }
       }).subscribe({
         complete() { that.router.navigate(["/login"]); },
-        error() { alert("Registration failed. E-mail address was already taken.") }
+        error() { alert("Registration failed. E-mail address was already taken."); alert("Operators: Did you set the address of the REST backend in /app/api/api-configuration.ts?") }
       });
     }
   }

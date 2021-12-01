@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -17,11 +16,14 @@ import { RouterModule, Routes } from '@angular/router'
 import { AuthControllerService, MediaControllerService, UserControllerService } from './api/services';
 import { HttpClientModule } from '@angular/common/http';
 import { ProfileComponent } from './profile/profile.component';
+import { UploadComponent } from './upload/upload.component';
+import { MediaComponent } from './media/media.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'store', component: StoreComponent },
+  { path: 'upload', component: UploadComponent },
   { path: 'profile', component: ProfileComponent }
 ]
 
@@ -31,7 +33,9 @@ const routes: Routes = [
     LoginComponent,
     StoreComponent,
     SignupComponent,
-    ProfileComponent
+    ProfileComponent,
+    UploadComponent,
+    MediaComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +45,7 @@ const routes: Routes = [
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatPaginatorModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

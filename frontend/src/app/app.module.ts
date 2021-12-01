@@ -19,6 +19,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { UploadComponent } from './upload/upload.component';
 import { MediaComponent } from './media/media.component';
 import { StoreItemComponent } from './store-item/store-item.component';
+import { CommentComponent } from './comment/comment.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -38,7 +39,8 @@ const routes: Routes = [
     ProfileComponent,
     UploadComponent,
     MediaComponent,
-    StoreItemComponent
+    StoreItemComponent,
+    CommentComponent
   ],
   imports: [
     BrowserModule,

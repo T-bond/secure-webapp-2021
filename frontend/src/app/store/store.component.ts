@@ -38,13 +38,14 @@ export class StoreComponent implements OnInit {
 
   public displayItems(items) {
     var componentFactory = this.resolver.resolveComponentFactory(StoreItemComponent);
+    this.resultsContainer.clear();
     if (items.length > 0) {
       items.forEach(item => {
         var storeItemComponent = this.resultsContainer.createComponent(componentFactory);
         storeItemComponent.instance.id = item.id;
         storeItemComponent.instance.title = item.title;
         storeItemComponent.instance.description = item.description;
-        storeItemComponent.instance.createdAt = item.createdAt;
+        storeItemComponent.instance.createdAt = new Date(item.createdAt).toDateString();;
         storeItemComponent.instance.createdBy = item.createdBy.username;
       });
     }
@@ -52,8 +53,6 @@ export class StoreComponent implements OnInit {
   }
 
   public onSubmit(): void {
-    /* I was unable to extract DTOs from API responses, so I decided fall back to XMLHTTPRequest for GET requests */
-
     var req = new XMLHttpRequest();
     req.addEventListener("load", () => {
       if (req.response) {

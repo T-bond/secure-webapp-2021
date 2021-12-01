@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthControllerService } from '../api/services';
-import { UserCreateRequestDto } from '../api/models';
 
 @Component({
   selector: 'app-signup',

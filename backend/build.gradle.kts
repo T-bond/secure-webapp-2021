@@ -35,6 +35,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-ui:1.5.12")
     implementation("org.springdoc:springdoc-openapi-data-rest:1.5.12")
     implementation("org.springdoc:springdoc-openapi-kotlin:1.5.12")
+    implementation("org.passay:passay:1.6.1")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

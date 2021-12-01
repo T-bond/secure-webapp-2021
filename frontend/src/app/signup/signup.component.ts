@@ -27,8 +27,9 @@ export class SignupComponent implements OnInit {
       ],
       password: ['', Validators.compose([
         Validators.required,
-        Validators.minLength(5),
-        Validators.maxLength(255)
+        Validators.minLength(8),
+        Validators.maxLength(255),
+        Validators.pattern("(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}")
         ])
       ],
       username: ['', Validators.compose([

@@ -29,18 +29,31 @@ export class MediaComponent implements OnInit {
     private mediaApi: MediaControllerService
   ) { }
 
-  public displayComments(items) {
-    var componentFactory = this.resolver.resolveComponentFactory(CommentComponent);
-    this.commentsContainer.clear();
-    if (items.length > 0) {
-      items.forEach(item => {
-        var storeItemComponent = this.commentsContainer.createComponent(componentFactory);
-        storeItemComponent.instance.id = item.id;
-        storeItemComponent.instance.user = item.createdBy.username;
-        storeItemComponent.instance.comment = item.comment;
-        storeItemComponent.instance.time = new Date(item.createdAt).toDateString();;
-      });
-    }
+  public reloadComments() {
+    var commentReq = new XMLHttpRequest();
+    commentReq.addEventListener("load", () => {
+      if (commentReq.response) {
+        var commentRes = JSON.parse(commentReq.response);
+        var componentFactory = this.resolver.resolveComponentFactory(CommentComponent);
+        this.commentsContainer.clear();
+        if (commentRes.content.length > 0) {
+          commentRes.content.forEach(item => {
+            var storeItemComponent = this.commentsContainer.createComponent(componentFactory);
+            storeItemComponent.instance.id = item.id;
+            storeItemComponent.instance.user = item.createdBy.username;
+            storeItemComponent.instance.comment = item.comment;
+            storeItemComponent.instance.time = new Date(item.createdAt).toDateString();;
+          });
+        }
+      } else {
+        alert("Error: unable to reach REST backend.");
+      }
+    });
+    commentReq.addEventListener("error", () => {
+      alert("Error: unable to reach REST backend.");
+    });
+    commentReq.open("GET", this.apiConfiguration.rootUrl + "/medias/" + this.id + "/comments?size=99999");
+    commentReq.send();
   }
   
   ngOnInit(): void {
@@ -64,25 +77,12 @@ export class MediaComponent implements OnInit {
       }
     });
     req.addEventListener("error", () => {
-      alert("Error: unknown CAFF ID.");
+      alert("Error: unknown comment ID.");
     });
     req.open("GET", this.apiConfiguration.rootUrl + "/medias/" + this.id);
     req.send();
 
-    var commentReq = new XMLHttpRequest();
-    commentReq.addEventListener("load", () => {
-      if (req.response) {
-        var res = JSON.parse(req.response);
-        this.displayComments(res.content);
-      } else {
-        alert("Error: unable to reach REST backend.");
-      }
-    });
-    commentReq.addEventListener("error", () => {
-      alert("Error: unable to reach REST backend.");
-    });
-    commentReq.open("GET", this.apiConfiguration.rootUrl + "/medias/" + this.id + "/comments");
-    commentReq.send();
+    this.reloadComments();
   }
 
   onSubmit(): void {
@@ -94,7 +94,7 @@ export class MediaComponent implements OnInit {
           comment: this.form.get("comment").value
         }
       }).subscribe({
-        complete() { that.router.navigate(["/login"]); },
+        complete() { that.reloadComments(); },
         error() { alert("Error: unable to reach REST backend.") }
       });
     }

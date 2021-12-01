@@ -41,11 +41,16 @@ export class UploadComponent implements OnInit {
     }
 
     req.addEventListener("load", () => {
-      alert("File has been upload successfully.")
-      this.router.navigate(["/store"]);
+      if(req.status == 204) {
+        alert("File has been upload successfully.")
+        this.router.navigate(["/store"]);
+      }
+      else {
+        alert("Please select a valid file to upload. Your CAFF file might have failed the validation check.");
+      }
     });
     req.addEventListener("error", () => {
-      alert("Please select a file to upload.");
+      alert("Please select a valid file to upload. Your CAFF file might have failed the validation check.");
     });
     req.open("POST", this.apiConfiguration.rootUrl + "/medias");
 

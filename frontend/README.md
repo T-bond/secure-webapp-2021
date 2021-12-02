@@ -13,7 +13,7 @@ To allow cross origin resource sharing in your browser (chrome/chromium):
 1. `mkdir temp`
 2. `chromium --disable-web-security --user-data-dir="temp"`
 
-## OpenAPI code generation
+## API updates (code generation)
 
 In case the API of the backend changes, do the following:
 

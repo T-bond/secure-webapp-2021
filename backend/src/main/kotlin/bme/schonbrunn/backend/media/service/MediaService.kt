@@ -1,6 +1,7 @@
 package bme.schonbrunn.backend.media.service
 
 import bme.schonbrunn.backend.auth.UserDetails
+import bme.schonbrunn.backend.configuration.Constants
 import bme.schonbrunn.backend.media.dto.*
 import bme.schonbrunn.backend.media.entity.CommentEntity
 import bme.schonbrunn.backend.media.entity.MediaEntity
@@ -86,7 +87,7 @@ class MediaService(
     fun createComment(id: Int, commentDto: CommentRequestDTO, authentication: Authentication) {
         val principal = authentication.principal
         if (principal !is UserDetails) {
-            throw InternalError("Unsupported user details found")
+            throw InternalError(Constants.UNSUPPORTED_DETAILS)
         }
 
         if (!mediaRepository.existsById(id)) {
@@ -110,7 +111,7 @@ class MediaService(
     fun modifyComment(mediaId: Int, commentId: Int, commentDto: CommentRequestDTO, authentication: Authentication) {
         val principal = authentication.principal
         if (principal !is UserDetails) {
-            throw InternalError("Unsupported user details found")
+            throw InternalError(Constants.UNSUPPORTED_DETAILS)
         }
 
         val comment = commentsRepository.findById(commentId).orElseThrow {
@@ -131,7 +132,7 @@ class MediaService(
     fun modifyMedia(id: Int, mediaDTO: ModifyMediaDTO, authentication: Authentication) {
         val principal = authentication.principal
         if (principal !is UserDetails) {
-            throw InternalError("Unsupported user details found")
+            throw InternalError(Constants.UNSUPPORTED_DETAILS)
         }
 
         val media = mediaRepository.findById(id).orElseThrow {
@@ -184,7 +185,7 @@ class MediaService(
     ) {
         val principal = authentication.principal
         if (principal !is UserDetails) {
-            throw InternalError("Unsupported user details found")
+            throw InternalError(Constants.UNSUPPORTED_DETAILS)
         }
 
         val userId = principal.userEntity.id
@@ -206,8 +207,8 @@ class MediaService(
             throw InvalidCaffFileException("The provided CAFF file is invalid")
         }
 
-        val UUID = UUID.randomUUID().toString()
-        val finalMedia = Paths.get("$caffsStore/$UUID.caff")
+        val uuid = UUID.randomUUID().toString()
+        val finalMedia = Paths.get("$caffsStore/$uuid.caff")
         try {
             finalMedia.parent.createDirectories()
             Files.move(tmpFile.toPath(), finalMedia)
@@ -224,7 +225,7 @@ class MediaService(
                 title = mediaData.title,
                 description = mediaData.description,
                 createdBy = entityManager.getReference(UserEntity::class.java, userId),
-                mediaName = UUID,
+                mediaName = uuid,
             )
         )
 

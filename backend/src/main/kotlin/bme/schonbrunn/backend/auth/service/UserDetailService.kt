@@ -12,9 +12,7 @@ class UserDetailsService(
 ) : SpringUserDetailsService {
     override fun loadUserByUsername(email: String?) =
         email?.let {
-            val userEntity = userRepository.findByEmail(email) ?: throw UsernameNotFoundException("")
-
-            UserDetails(userEntity)
+            UserDetails(userRepository.findByEmail(email) ?: throw UsernameNotFoundException(""))
         }
 
 

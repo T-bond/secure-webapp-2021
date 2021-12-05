@@ -1,6 +1,7 @@
 package bme.schonbrunn.backend.user.service
 
 import bme.schonbrunn.backend.auth.UserDetails
+import bme.schonbrunn.backend.configuration.Constants
 import bme.schonbrunn.backend.user.dto.OwnUserDTO
 import bme.schonbrunn.backend.user.dto.UserCreateRequestDTO
 import bme.schonbrunn.backend.user.dto.UserUpdateRequestDTO
@@ -43,7 +44,7 @@ class UserService(
     fun getMe(authentication: Authentication): OwnUserDTO {
         val principal = authentication.principal
         if (principal !is UserDetails) {
-            throw InternalError("Unsupported user details found")
+            throw InternalError(Constants.UNSUPPORTED_DETAILS)
         }
 
         logger.info("Requesting ME information")
@@ -53,7 +54,7 @@ class UserService(
     fun deleteUser(id: Int, authentication: Authentication) {
         val principal = authentication.principal
         if (principal !is UserDetails) {
-            throw InternalError("Unsupported user details found")
+            throw InternalError(Constants.UNSUPPORTED_DETAILS)
         }
 
         if (id == principal.userEntity.id) {
@@ -74,7 +75,7 @@ class UserService(
     fun modifyUser(id: Int, userDTO: UserUpdateRequestDTO, authentication: Authentication) {
         val principal = authentication.principal
         if (principal !is UserDetails) {
-            throw InternalError("Unsupported user details found")
+            throw InternalError(Constants.UNSUPPORTED_DETAILS)
         }
 
         val media = userRepository.findById(id).orElseThrow {

@@ -4,7 +4,7 @@ This repository contains our web secure application implemented for the 2021 com
 
 ### Documentation
 
-+Documentation files created for the project can be found on the **wiki**.
+Documentation files created for the project can be found on the **wiki**.
 
 ### Secure web app
 

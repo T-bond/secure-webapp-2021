@@ -9,6 +9,8 @@ import bme.schonbrunn.backend.media.repository.CommentRepository
 import bme.schonbrunn.backend.media.repository.MediaRepository
 import bme.schonbrunn.backend.parser.NativeParserDriver
 import bme.schonbrunn.backend.user.entity.UserEntity
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.data.domain.Page
@@ -42,14 +44,28 @@ class MediaService(
     @Value("\${backend.store.previews:'previews'}")
     private var previewsStore: String?,
 ) {
-    fun listMedia(pageable: Pageable) = mediaRepository.findAll(pageable).map {
-        MediaDTO.from(it)
+
+    private val logger: Logger = LoggerFactory.getLogger(MediaService::class.java)
+
+
+    fun listMedia(pageable: Pageable): Page<MediaDTO> {
+        logger.info("Listing media with page: $pageable")
+        return mediaRepository.findAll(pageable).map {
+            1
+            MediaDTO.from(it)
+        }
     }
 
-    fun getMediaFile(id: Int): SingleMediaDTO = mediaRepository.findById(id).map {
-        SingleMediaDTO.from(it)
-    }.orElseThrow {
-        EntityNotFoundException()
+    fun getMediaFile(id: Int): SingleMediaDTO {
+        val result = mediaRepository.findById(id).map {
+            SingleMediaDTO.from(it)
+        }.orElseThrow {
+            logger.info("Getting media file info for non existing media: $id")
+            EntityNotFoundException()
+        }
+
+        logger.info("Getting media file info for media: $id")
+        return result
     }
 
     fun getComments(
@@ -57,9 +73,11 @@ class MediaService(
         pageable: Pageable
     ): Page<CommentDTO> {
         if (!mediaRepository.existsById(id)) {
+            logger.info("Getting comments for non existing media: $id")
             throw EntityNotFoundException()
         }
 
+        logger.info("Getting comments for media: $id with page: $pageable")
         return commentsRepository.findAllByMediaId(id, pageable).map {
             CommentDTO.from(it)
         }
@@ -72,10 +90,12 @@ class MediaService(
         }
 
         if (!mediaRepository.existsById(id)) {
+            logger.info("Creating comment for non existing media: $id")
             throw EntityNotFoundException()
         }
 
         val userId = principal.userEntity.id
+        logger.info("Creating comment for media: $id")
 
         commentsRepository.save(
             CommentEntity(
@@ -94,13 +114,16 @@ class MediaService(
         }
 
         val comment = commentsRepository.findById(commentId).orElseThrow {
+            logger.info("Trying to modify non existing comment: $commentId")
             throw EntityNotFoundException()
         }
 
         if (!principal.userEntity.isAdmin && principal.userEntity.id != comment.createdBy.id) {
+            logger.info("Trying to edit other users comment: $commentId")
             throw AccessDeniedException("User can only modify their of comments")
         }
 
+        logger.info("Editing comment: $commentId")
         comment.comment = commentDto.comment
     }
 
@@ -112,35 +135,44 @@ class MediaService(
         }
 
         val media = mediaRepository.findById(id).orElseThrow {
+            logger.info("Trying to modify not existing media: $id")
             throw EntityNotFoundException()
         }
 
         if (!principal.userEntity.isAdmin && principal.userEntity.id != media.createdBy.id) {
+            logger.info("Trying to modify other users media: $id")
             throw AccessDeniedException("User can only modify their of comments")
         }
 
+        logger.info("Modifying media: $id")
         media.title = mediaDTO.title
         media.description = mediaDTO.description
     }
 
-    fun searchMedia(searchDto: SearchRequestDTO, pageable: Pageable) =
-        mediaRepository.findAllByTitleContainingIgnoreCase(searchDto.titleContains, pageable).map {
+    fun searchMedia(searchDto: SearchRequestDTO, pageable: Pageable): Page<MediaDTO> {
+        logger.info("Searching media: $searchDto Page: $pageable")
+        return mediaRepository.findAllByTitleContainingIgnoreCase(searchDto.titleContains, pageable).map {
             MediaDTO.from(it)
         }
+    }
 
     fun deleteMediaFile(id: Int) {
         if (!mediaRepository.existsById(id)) {
+            logger.info("Trying delete non existing media: $id")
             throw EntityNotFoundException()
         }
 
+        logger.info("Deleting media: $id")
         mediaRepository.deleteById(id);
     }
 
     fun deleteComment(mediaId: Int, commentId: Int) {
         if (!commentsRepository.existsById(commentId)) {
+            logger.info("Trying delete non existing comment: $commentId")
             throw EntityNotFoundException()
         }
 
+        logger.info("Deleting comment: $commentId")
         commentsRepository.deleteById(commentId);
     }
 
@@ -161,6 +193,7 @@ class MediaService(
         try {
             multipartFile.transferTo(tmpFile)
         } catch (exception: Exception) {
+            logger.error("Could not transfer media file to TMP store", exception)
             tmpFile.deleteOnExit()
         }
 
@@ -169,6 +202,7 @@ class MediaService(
             tmpFile.delete()
             tmpFile.deleteOnExit()
 
+            logger.warn("Uploaded invalid CAFF file")
             throw InvalidCaffFileException("The provided CAFF file is invalid")
         }
 
@@ -178,6 +212,7 @@ class MediaService(
             finalMedia.parent.createDirectories()
             Files.move(tmpFile.toPath(), finalMedia)
         } catch (exception: Exception) {
+            logger.warn("Could not move uploaded CAFF to final destination", exception)
             tmpFile.delete()
             tmpFile.deleteOnExit()
 
@@ -193,6 +228,7 @@ class MediaService(
             )
         )
 
+        logger.info("Saved caff file: ${savedEntity.id}")
         generatePreview(savedEntity)
     }
 
@@ -202,8 +238,11 @@ class MediaService(
 
         return try {
             previewPath.parent.createDirectories()
-            NativeParserDriver.preview(finalMedia.absolutePathString(), previewPath.absolutePathString())
+            val result = NativeParserDriver.preview(finalMedia.absolutePathString(), previewPath.absolutePathString())
+            logger.info("Generated preview for media: ${mediaEntity.id}")
+            result
         } catch (exception: Exception) {
+            logger.info("Failed to generate preview for media: ${mediaEntity.id}", exception)
             false
         }
     }
@@ -215,10 +254,12 @@ class MediaService(
 
         val caffPath = Paths.get("$caffsStore/${mediaEntity.mediaName}.caff")
         if (!Files.exists(caffPath)) {
+            logger.info("Failed to get CAFF for media not existing media: $id")
             throw EntityNotFoundException()
         }
 
 
+        logger.info("Requested CAFF file for media: $id")
         val resource = ByteArrayResource(Files.readAllBytes(caffPath))
         return ResponseEntity.ok()
             .contentType(MediaType.APPLICATION_OCTET_STREAM)
@@ -235,10 +276,12 @@ class MediaService(
             generatePreview(mediaEntity) // Try to regenerate preview
 
             if (!Files.exists(previewPath)) {
+                logger.info("Requested preview which could not be generated for media: $id")
                 throw EntityNotFoundException()
             }
         }
 
+        logger.info("Returning preview for media: $id")
         val resource = ByteArrayResource(Files.readAllBytes(previewPath))
         return ResponseEntity.ok()
             .contentType(MediaType.APPLICATION_OCTET_STREAM)

@@ -7,6 +7,8 @@ import bme.schonbrunn.backend.user.dto.UserUpdateRequestDTO
 import bme.schonbrunn.backend.user.entity.UserEntity
 import bme.schonbrunn.backend.user.exception.EmailAlreadyInUseException
 import bme.schonbrunn.backend.user.repository.UserRepository
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder
@@ -20,9 +22,12 @@ class UserService(
     private val passwordEncoder: DelegatingPasswordEncoder
 ) {
 
+    private val logger: Logger = LoggerFactory.getLogger(UserService::class.java)
+
     fun createUser(userCreateRequest: UserCreateRequestDTO) {
         val email = userCreateRequest.email
         if (userRepository.existsByEmail(email)) {
+            logger.info("Duplicated email registration request: $email")
             throw EmailAlreadyInUseException()
         }
 
@@ -41,6 +46,7 @@ class UserService(
             throw InternalError("Unsupported user details found")
         }
 
+        logger.info("Requesting ME information")
         return OwnUserDTO.from(principal.userEntity)
     }
 
@@ -51,13 +57,16 @@ class UserService(
         }
 
         if (id == principal.userEntity.id) {
+            logger.info("Own user delete request: $id")
             throw AccessDeniedException("Can not delete own user")
         }
 
         if (!userRepository.existsById(id)) {
+            logger.info("Trying to delete not existing user $id")
             throw EntityNotFoundException()
         }
 
+        logger.info("Deleting user $id")
         userRepository.deleteById(id);
     }
 
@@ -69,13 +78,16 @@ class UserService(
         }
 
         val media = userRepository.findById(id).orElseThrow {
+            logger.info("Deleting non existing user: $id")
             throw EntityNotFoundException()
         }
 
         if (!principal.userEntity.isAdmin && principal.userEntity.id != media.id) {
-            throw AccessDeniedException("User can only modify their comments")
+            logger.info("Trying to edit other user: $id")
+            throw AccessDeniedException("User can only modify itself")
         }
 
+        logger.info("Editing user: $id")
         media.apply {
             email = userDTO.email
             username = userDTO.username

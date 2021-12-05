@@ -2,6 +2,12 @@
 
 This repository contains our web secure application implemented for the 2021 computer security course offered by the Budapest University of Technology and Economics.
 
+### Documentation
+
+```diff
++Documentation files created for the project can be found on the wiki.
+```
+
 ### Secure web app
 
 ```diff
@@ -10,11 +16,6 @@ This repository contains our web secure application implemented for the 2021 com
 https://github.com/aldr4fu/secure-webapp-2021/tree/main/frontend
 
 https://github.com/aldr4fu/secure-webapp-2021/tree/main/backend
-
-
-```diff
-+Documentation files created for the 3rd phase can be found on the project wiki.
-```
 
 ### CAFF parser
 

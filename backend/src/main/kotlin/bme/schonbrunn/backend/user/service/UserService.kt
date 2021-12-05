@@ -17,7 +17,7 @@ import javax.transaction.Transactional
 @Service
 class UserService(
     private val userRepository: UserRepository,
-    private val passwordEncoder: DelegatingPasswordEncoder,
+    private val passwordEncoder: DelegatingPasswordEncoder
 ) {
 
     fun createUser(userCreateRequest: UserCreateRequestDTO) {

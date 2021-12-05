@@ -27,8 +27,6 @@ export class ProfileComponent implements OnInit {
     this.form = this._formBuilder.group({
     });    
 
-    /* I was unable to extract DTOs from API responses, so I decided fall back to XMLHTTPRequest for GET requests */
-
     var req = new XMLHttpRequest();
     req.addEventListener("load", () => {
       if (req.response) {

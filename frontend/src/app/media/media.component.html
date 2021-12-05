@@ -1,0 +1,20 @@
+<div id="media-card">
+    <mat-card>
+      <mat-card-content>
+        <h2 id="media-card-title" >{{title}}</h2>
+        <b>Description: </b> {{description}} <br>
+        <b>Created by: </b> {{createdBy}} <br>
+        <b>Created at: </b> {{createdAt}} <br>
+        <img id="media-preview" src="{{apiConfiguration.rootUrl}}/medias/{{id}}/preview"/><br>
+        <button id="download-button" mat-stroked-button color="primary" type="button" (click)="download()">Download</button>
+        <div #commentsContainer></div>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <mat-form-field id="comment-textfield" class="full-width-input">
+              <input matInput formControlName="comment" placeholder="What dou you think about this video?" required>
+          </mat-form-field><br>
+          <button id="comment-button" mat-stroked-button color="primary">Leave your comment</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div #resultsContainer></div>

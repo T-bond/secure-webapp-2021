@@ -4,10 +4,10 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <h2 id="welcome-message" >Welcome to the CAFF store!</h2>
           <mat-form-field id="username-textfield" class="full-width-input">
-            <input matInput placeholder="username" formControlName="username" required>
+            <input matInput placeholder="username (3+ characters)" formControlName="username" required>
           </mat-form-field>
           <mat-form-field id="password-textfield" class="full-width-input">
-            <input matInput type="password" placeholder="password" formControlName="password" required>
+            <input matInput type="password" placeholder="password (8+ characters, contains lower- and uppercase, numeric and from #?!@$%^&*-" formControlName="password" required>
           </mat-form-field><br>
           <mat-form-field id="email-textfield" class="full-width-input">
             <input matInput type="email" placeholder="email address" formControlName="email" required>

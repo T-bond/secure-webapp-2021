@@ -1,17 +1,12 @@
 package bme.schonbrunn.backend.user.service
 
 import bme.schonbrunn.backend.auth.UserDetails
-import bme.schonbrunn.backend.configuration.WebSecurityConfiguration
 import bme.schonbrunn.backend.user.dto.OwnUserDTO
 import bme.schonbrunn.backend.user.dto.UserCreateRequestDTO
 import bme.schonbrunn.backend.user.dto.UserUpdateRequestDTO
 import bme.schonbrunn.backend.user.entity.UserEntity
 import bme.schonbrunn.backend.user.exception.EmailAlreadyInUseException
 import bme.schonbrunn.backend.user.repository.UserRepository
-import org.hibernate.validator.internal.util.Contracts.assertTrue
-import org.passay.*
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.ApplicationContext
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder
@@ -22,9 +17,7 @@ import javax.transaction.Transactional
 @Service
 class UserService(
     private val userRepository: UserRepository,
-    private val passwordEncoder: DelegatingPasswordEncoder,
-    @Autowired
-    private val webSecurityConfiguration: WebSecurityConfiguration
+    private val passwordEncoder: DelegatingPasswordEncoder
 ) {
 
     fun createUser(userCreateRequest: UserCreateRequestDTO) {
@@ -32,9 +25,6 @@ class UserService(
         if (userRepository.existsByEmail(email)) {
             throw EmailAlreadyInUseException()
         }
-
-        assertTrue(webSecurityConfiguration.passwordValidator().validate(PasswordData(userCreateRequest.password)).isValid,
-            "Error: password does not meet the complexity requirements")
 
         val user = UserEntity(
             email = userCreateRequest.email,
